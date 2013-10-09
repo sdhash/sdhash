@@ -348,9 +348,11 @@ bloom_filter::compare(bloom_filter *other, double scale) {
     uint64_t *bf_64 = (uint64_t *)bf;
     uint64_t *bf2_64 = (uint64_t *)other->bf;
     int64_t res=0;
-    for (uint i=0 ; i < bf_size / 8 ; i++) {
+#ifndef _M_IX86 // allowing win32 shortcut
+    for (uint32_t i=0 ; i < bf_size / 8 ; i++) {
         res+=_mm_popcnt_u64(bf_64[i] & bf2_64[i]);
     }
+#endif
     int max_est = (this->hamminglg < other->hamminglg) ? this->hamminglg : other->hamminglg;
     double m = bf_size*8;
     double k = 5;
@@ -426,7 +428,9 @@ bloom_filter::compute_hamming() {
     hamming=0;
     hamminglg=0;
     uint64_t *b64 = (uint64_t *)this->bf;
-    for( uint j=0; j<bf_size/8; j++) {
+#ifndef _M_IX86 // allowing win32 shortcut
+    for( uint32_t j=0; j<bf_size/8; j++) {
         hamminglg += _mm_popcnt_u64(b64[j]);
     }
+#endif
 }

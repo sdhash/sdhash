@@ -175,7 +175,7 @@ sdbf::sdbf(const std::string& str) {
        this->dd_block_size=boost::lexical_cast<uint32_t>(process);
        // set up elem counts array
        this->elem_counts = (uint16_t *)alloc_check( ALLOC_ZERO, this->bf_count*sizeof(uint16_t), "sdbf_from_stream", "this->elem_counts", ERROR_EXIT);
-       for (uint i=0; i< this->bf_count; i++) {
+       for (uint32_t i=0; i< this->bf_count; i++) {
            uint32_t tmpelem=0;
            std::getline(ss,process,':'); // elem_counts
            std::stringstream sstmp;
