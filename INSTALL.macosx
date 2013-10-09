@@ -1,0 +1,23 @@
+
+To build on OS X Lion/Snow Leopard:
+
+We have changed the program to no longer require g++4.4 or
+higher.  Xcode is necessary to build.  We have tested the
+most current versions of Xcode's gcc only as of May 2012. 
+
+To build/install the server version on OSX, the best way I 
+have found for thrift is to install thrift from MacPorts,
+0.6.0 is the latest version, so the header stuff needs to
+be regenerated.
+
+After thrift is installed, in the sdhash-server directory
+
+thrift --gen cpp sdhashsrv.thrift
+thrift --gen py sdhashsrv.thrift
+
+edit the sdhash-server Makefile to use /opt/local directories for thrift,
+and build server/client/mgr programs with 'make'
+
+We have not tested the GPU version on OS X as we have
+no hardware with which to try it.  If CUDA works, it
+should as well.

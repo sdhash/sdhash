@@ -1,0 +1,4 @@
+block-size=16
+sample-size=4
+thread-count=4
+threshold=10

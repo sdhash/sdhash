@@ -1,0 +1,95 @@
+{% extends "layout.html" %}
+{% block body %}
+<script type=text/javascript src="static/list-parser.js"></script>
+<h1 class="heading ui-corner-all ">sdhash server: {{status}}</h1>
+<div class="content ui-corner-all" id="latest" style="display: none">
+Latest actions: <br/>
+ <span id="newres"></span>
+<div class="newhashes">
+</div>
+</div>
+<div id="tabs">
+	<ul>
+		<li><a href="#tabs-2">Generate Hashsets</a></li>
+		<li><a href="#tabs-3">Explore Hashsets</a></li>
+		<li><a href="#tabs-1">Launch Comparisons</a></li>
+		<li><a href="#tabs-0">Results</a></li>
+	</ul>
+<div class="content" id="tabs-0">
+<div class="resultdetail">
+<span class="topmarker"></span>
+{% for setid, val in results %}
+   <div class="resultlisting ui-state-default ui-corner-all">
+   <a href="#res{{setid}}" class="result-list">+ {{val}}&nbsp;<span class="resstatus" id="{{setid}}"></span></a>
+   <a class="remove" style="float:right;" id="del{{setid}}" href="#">remove</a>
+   <div style="display: none" class="result{{setid}}">
+   <table id="resulttab{{setid}}" cellpadding="0" cellspacing="0" border="0" class="display">
+   </table>
+   </div>
+   </div>
+{% endfor %}
+</div>
+</div>
+<div class="content" id="tabs-1">
+<div class="query">
+<div class="query-center" style="overflow:hidden;">
+	<div style="position:relative ;width:500px;float:left;">
+		<table id="set1"  cellpadding="0" cellspacing="0" border="0" class="display">
+		</table>
+	</div>
+	<div style="position:relative;padding:20px;float:left;line-height:2;">
+<form>
+Use data sampling:
+<input type="checkbox" name="samplebox" id="samplebox"/>
+<input type="textbox" name="sample" id="sample" value="4"/ style="width:2em;text-align:right;display:none;">
+<br/>
+Confidence level threshold:
+<input type="checkbox" name="confidencebox" id="confidencebox"/>
+<input type="textbox" name="confidence" id="confidence" value="1"/ style="width:2em;text-align:right;display:none;">
+<br/>
+<input type="submit" id="compare" value="Launch"/>
+</form>
+<div style="padding-top:10px">
+<span class="ui-state-error ui-corner-all" style="padding:10px;display:none" id="compareerror"></span>
+</div>
+</div>
+</div> <!--query-center-->
+</div> <!--query-->
+</div> <!--content-->
+<div class="content" id="tabs-2">
+<div class="hashing">
+<div class="hashing-center" style="overflow:hidden;">
+	<div style="position:relative ;width:800px;float:left;">
+	<table id="filetable" cellpadding="0" cellspacing="0" border="0" class="display">
+	</table>
+	</div>
+	<div style="position:relative;padding:20px;float:left;line-height:2;">
+	<form>
+	Name this hashset: 
+<br/>
+	<input type="text" name="hashsetname" id="hashsetname">
+<br/>
+	<input type="submit" id="createhash" value="Create"/>
+	</form>
+<div style="padding-top:10px;">
+<span class="ui-state-error ui-corner-all" style="padding:10px;display:none" id="hasherror"></span>
+</div>
+	</div>
+</div> <!--hashing-center-->
+</div> <!--hashing-->
+</div> <!--CONTENT--> 
+<div class="content" id="tabs-3">
+<div class="hashsetdetail" style="overflow:hidden;">
+	<div style="position:relative ;width:400px;float:left;">
+		<table id="setex"  cellpadding="0" cellspacing="0" border="0" class="display">
+		</table>
+	</div>
+	<div style="position:relative;float:left;">
+		<table id="infotable"  cellpadding="0" cellspacing="0" border="0" class="display">
+		</table>
+	</div>
+</div> <!--query-center-->
+</div>
+</div> <!--content-->
+</div> <!--tabs-->
+{% endblock %}

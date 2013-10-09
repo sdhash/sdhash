@@ -1,0 +1,28 @@
+Steps for sdhash-server on recent ubuntu variants:
+
+Download packages/thrift_0.8.0_amd64.deb and install:
+    sudo dpkg -i thrift_0.8.0_amd64.deb
+	sudo ldconfig
+
+Get latest sdhash, unzip, build it:
+    make
+    make server
+    run server to test
+
+
+Run server: 
+
+    sdhash-server/sdhash-srv --hashdir /home/sdbfs --sourcedir /home/sources
+
+Run user-interface:
+
+    python sdhash-ui/sdhashuiserver.py
+	
+
+User interface will default to 0.0.0.0:8080 -- this can be easily
+changed in sdhash-ui/cherrypy.conf.  Localhost-only works fine.
+
+The user interface code will connect to a sdhash-srv process
+at localhost:9090, to change that, edit sdhash-ui/serverui/config.py.
+
+Firewall at will, please!

@@ -1,0 +1,69 @@
+Note:  These are building instructions for sdhash on windows,
+please use the executables we provide instead, as this is
+very annoying to do by hand.  
+
+To build/link sdhash on visual studio (very, very alpha.)
+
+I have tried this on: windows 7/x64, visual studio 2010 pro.
+
+boost:  
+I used 1.49.  Build two stage directories of static libraries, one 
+for 32-bit linkage, and one for 64-bit linkage.
+
+Boost's instructions for 32-bit builds are fine.  
+
+If you have all day, build everything once in 32-bit mode, 
+suggest to change the stage dir to something with --stagedir=.\stage32
+and then build it all in 64-bit. 
+
+The currently required libraries are: thread, regex, program_options,
+filesystem, date_time
+
+To build 64-bit:
+
+bjam --stagedir=.\stage64 --with-thread --with-regex --with-program_options 
+--with-filesystem --with-date_time --toolset=msvc-10.0 address-model=64
+--build-type=complete link=static
+
+openssl:
+I used version 1.0.1c.  Same thing here, build one set of 32-bit
+static libs, and one set of 64-bit static libs.  Make sure to note that
+the libraries are compiled \MD -multithreaded DLL to adjust build settings
+accordingly, or change that.  In order to keep sdhash all static,
+build the openssl libraries to \MT -multithreaded, and build the program
+the same way. 
+
+openssl has completely adequate install instructions in their windows
+readme.  Do everything from the appropriate 32 or 64-bit visual
+studio command prompt, as they have all the environments set up.
+
+Then....
+
+Create a new msvc++ console project in visual studio.
+Drop sdbf, sdhash-src, and base64 directories into the project's folder in Explorer.
+
+Add all of these files to the project (right click project (not solution)
+add->existing items. )
+
+Set the active configuration to Release/Win32
+
+Change the project properties (right click project->properties) 
+Edit c++ options to add include directories for boost and openssl and
+turn off precompiled headers.   Edit linker options to add extra
+library directories (stage/lib from boost, and openssl's lib directory).
+Edit linker options under Input to add ssleay32.lib and libeay32.lib.
+Also add setargv.obj to this to support *.foo globbing. 
+Edit c++ options for Code Generation to change Runtime Library to /MD if
+it is not already.  To build completely static use /MT instead.
+
+Then the active configuration to Release/x64, do all of those options
+again, and change the directories to 64-bit ones for the library includes
+where applicable.  
+
+Do ctrl-shift-b to build.  "Cannot find libraryX" is either it's not
+present where you said it was, it's spelled wrong, or it's 32 bit when
+you are trying to compile 64.  Other errors probably my fault. 
+
+Find the built executable in the project directory from a command prompt
+and run!
+

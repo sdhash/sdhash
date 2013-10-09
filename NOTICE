@@ -1,0 +1,43 @@
+
+Written by Vassil Roussev and Candice Quates
+
+This work is made available under the Apache License, Version 2.0.
+
+You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License. 
+
+Several Boost Libraries are included in this distribution as a 
+convenience.  See the file external/LICENSE_1_0.txt for details on
+licensing of boost components
+
+I have applied the patch referenced here to this boost distribution:
+https://svn.boost.org/trac/boost/ticket/6821
+
+The base64/ code is from the stringencoders project, 
+http://code.google.com/p/stringencoders/
+and is available under the 'new' BSD license.  
+
+The lz4/ code is from the lz4 project,
+http://code.google.com/p/lz4
+and is made available under the 'new' BSD license.  
+
+We are using the apache thrift project, thrift.apache.org, which is
+available under the apache 2.0 license.  Thrift is not included 
+in this distribution directly.
+
+The web interface uses the CherryPy web server -- whose BSD license
+is included in its' source, and the Jinja2 templating engine - 
+also BSD licensed and included in the source. 
+
+The sdhash-gpu code uses some freely-licensed Nvidia example
+code in its inspiration, details are available in the top
+of sdhash-gpu/matrixCompare.cu 
+
+

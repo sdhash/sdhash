@@ -1,0 +1,18 @@
+Building and installing sdhash-srv.
+
+sdhash-srv is built using Apache/Facebook Thrift, version 0.8.0, which is
+available at http://thrift.apache.org.  It requires a recent install of boost
+to be present, among other dependencies.  Installation instructions for
+thrift are here:  http://thrift.apache.org/docs/install/ .  We found 
+while installing that we needed to have all listed dependencies in place
+before running the bootstrap/configure process for thrift.
+
+To build and link our server code we only needed to build thrift with C++
+support.  Python support is recommended for using the generated python
+code.  We use boost 1.49 in the main sdhash tree, and if possible it
+is probably best to keep that requirement. 
+
+The Makefile in the sdhash-server directory searches for the thrift 
+includes in /usr/local/include/thrift, and builds sdhash-srv, sdhash-cli
+and sdhash-mgr executables. 
+

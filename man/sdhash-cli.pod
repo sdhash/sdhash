@@ -1,0 +1,155 @@
+=head1 NAME
+
+sdhash-cli - client for similarity digest server
+
+=head1 SYNOPSIS
+
+B<sdhash-cli> [options] [mode] [files]
+
+
+=head1 DESCRIPTION
+
+B<sdhash-cli> is a client front end to the sdhash server sdhash-srv.
+
+=head1 OPTIONS
+
+=over 4 
+
+=item B<-H>, B<--host> <hostname>
+
+Connects to sdhash server running at host.  Client defaults to localhost.
+
+=item B<-P>, B<--port> <port>
+
+Sets port of sdhash server to connect to.  Client defaults to port 9090.
+
+=item B<-b>, B<--block-size> <N>
+
+Enables block mode for hash generation.  Hashes will be generated in Nkb blocks.
+Suggested block size for disk hashes is 16, for memory dumps we suggest 4.
+
+=item B<-t>, B<--threshold> <-1-100>
+
+Sets a confidence threshold for comparisions.  Use this to filter results
+to reduce false positives.  Used with comparison and query modes.
+Use '-1' to display all comparisons.
+
+=item B<-s>, B<--sample-size> <1-16>
+
+Uses a sampling of filters to perform queries, which speeds up
+query results significantly.  Used for query-mode only.
+
+=item B<--verbose> 
+
+Displays warnings
+
+=back
+
+=head1 MODES
+
+=over 4
+
+=item B<HASHING,LOADING,SAVING,LISTING>
+
+=item B<-l>, B<--list> 
+
+List sets of hashes currently loaded on the running server. 
+
+=item B<default> <files>
+
+The default mode is generation mode, and will generate similiarity digests of 
+all files given to it on the command line and save them to a set.
+Using -b will generate block-based hash digests which are useful for processing disk images and memory dumps.
+
+=over 4
+
+B<sdhash-cli> [options] file1 file2 file4 foo* 
+
+B<sdhash-cli> B<--block-size> 16 image.dd
+
+=back
+
+=item B<-i>, B<--import> <file.sdbf>
+
+Imports a sdbf file into the server.  
+
+=item B<-e>, B<--export> <N> <file.sdbf>
+
+Exports set number N to file.sdbf.
+
+=item B<-d>, B<--show-set-data> <N> 
+
+Prints all SDBFs in set number N to stdout.
+
+=item B<-n>, B<--show-set-names> <N> 
+
+Prints names and sizes of all SDBFs in set number N to stdout.
+
+=item B<COMPARING>
+
+=item B<-c>, B<--compare> <N>
+
+Single comparison mode takes a set number as an argument and compares each item in that set to every other item in that set.
+
+=over 4
+
+B<sdhash-cli> B<--compare> 3
+B<sdhash-cli> B<-c> 3
+
+=back
+
+=item B<-c>, B<--compare> <N> <M>
+
+Comparison mode can also compare two sets, numbers N and M, optionally sampling the "query" with the B<-s> sample size
+option, and compares each digest in the query to each digest in the target.
+
+=over 4
+
+B<sdhash-cli> B<--compare> 3 5
+
+B<sdhash-cli> B<--sample-size> 4 B<--compare> 0 4
+
+B<sdhash-cli> B<-s> 4 B<-c> 2 7
+
+=back
+
+=item B<--results-list> 
+
+Retrieve a listing of results
+
+=item B<--type> <default|indexing|web>
+
+Sets the type of results listing searched for.  If omitted, will search
+for comparison default results.
+
+=item B<-r>, B<--results> resultID
+
+Returns saved results, if any, associated with a resultID retrieved
+from B<--results-list>
+
+=item B<SEARCHING>
+
+Searching uses index files generated upon hashing or loaded into the
+server to provide a fast lookup mechanism useful for driving data filtering.
+Searching does not generate a saved set of digests; it generates a results set.
+Results can be retrieved by using B<--results-list> B<--type> indexing.
+
+=item B<--index-search> 
+
+Produces matches by searching set-level indexes.
+
+=item B<--index> 
+
+Hashing option, generate and save indexes while creating sdbf hashes.
+
+=back
+
+=head1 AUTHORS
+
+B<sdhash-cli> was written by Vassil Roussev <vassil@roussev.net> and Candice Quates <candice@egobsd.org>.  http://sdhash.org/
+
+=head1 LICENSE
+
+B<sdhash-cli> is distributed under the Apache License v2.0
+
+=cut

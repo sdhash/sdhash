@@ -1,0 +1,148 @@
+New in version 3.4
+
+New constructor for sdbf class to accept strings. 
+
+Major GPU program speedup via reduction changes.
+
+Bugfix for current boost version and c++ 11
+
+Bugfix for underflow in hash generation 
+
+Updated/tested python swig interface
+
+x86-32 bit linux compilation fix for cpuid
+
+Updated test program.
+
+Thanks to Tom Sires, Alex Nelson, Jesse Kornblum, Simon Spero, and Andrei Costin for
+patches and requests.
+
+--------
+New in version 3.3
+
+Major bugfix involving self-to-self block-based comparison scoring,
+we are now evenly discounting unfilled filters.
+
+Added --separator change option.
+
+Clarified indexing options/formats.
+
+Enabled support for multiple lists-of-files to hash.
+
+Now passing -Wall on gcc on Linux in main program.
+
+--------
+New in version 3.2.5
+
+Significant speedup of CPU comparisons via openMP threads.  Now 
+requiring openMP. 
+
+Program will automatically use the maximum number of cores/threads
+as given by openMP, on generation and comparison.
+--------
+New in version 3.2
+
+CUDA-accelerated GPU comparison program available - sdhash-gpu. 
+
+Changes to indexing to auto-generate indexes of larger, more 
+usable size (640MB) to search much more information.
+
+Small change to bloom filter fullness threshold for comparison,
+we now require 16 elements instead of 6.
+--------
+New in version 3.1
+
+New comparison code using the POPCNT instruction.  Marked speed improvements 
+on intel, cache performance improvements on AMD.
+
+Refined the searching/index components, including auto-generation of reference
+set from large quantity of small files, search shortcuts, etc.  Indexes are
+now stored compressed on disk using lz4.
+
+More additions to --verbose as progress indicators.
+
+Overhaul of sdhash-cli options, matching sdhash as closely as possible and much 
+more flexible.  Also removing last traces of posix from sdhash-cli for inclusion 
+into windows port.
+--------
+New in version 3.0
+
+sdbf_set indexing method, to be generated with --index while hashing
+and searched with --search-index while hashing.
+
+temp-bugfix: some speedup for very small reference data
+bugfix: segmenting was seeing too-large final segment on windows
+--------
+New in version 2.3
+
+Web interface using python/jquery -- talks to thrift
+--validate option
+tons of --verbose debugging output
+New thrift-server sources directory
+bugfix: for invalid sdbf file reading no longer crashes
+bugfix: windows recursive search filesystem permissions crash fixed
+
+--------
+New in version 2.2
+
+Very beta native win32/win64 port
+Threads updated to use boost::thread instead of pthreads directly
+Program options updated to support all command line options in sdhash.cfg
+Filesystem access now primarily c++/boost not posix
+Thrift client/server now supports asynchronous mode comparisions
+output file option -o --output 
+
+--------
+
+New in version 2.1
+
+recursive directory hashing with --deep -r option
+sdhash supports input from stdin
+argument --segment-size -z to customize read-in segment size
+argument --name -n to rename stdin hashes
+new client/server programs using Thrift
+api updates to use const and clearer naming conventions
+api updated with formal 'set' class
+sdhash auto-switching to block mode when files are >16MB
+new base64 encoding library
+
+--------
+
+
+New in version 2.0
+
+gnu-style long-options for standalone and client programs
+configuration file capability for standalone sdhash sdhash.cfg
+fixed: sdhash buffers large files instead of memory mapping the entire thing
+sdhash server program sdhashd, and sdhash-cli client program.
+Client and server should be considered beta software.
+sdhash-dd program removed and changed to -b option for block size
+sdbf version upgraded to add 'original size' into the header information
+"view" option to create subsets of sets matching an expression
+added: Boost libraries for regular expressions
+fixed: import as file list now can use DD mode
+fixed: sampling now non-destructive
+swig-python bindings now exist with a sample program
+Now large block hashes are "streamed" in chunks instead of as one giant hash.
+
+---------
+
+New in version 1.8
+
+-i file.txt option to generate hashes from a file list. 
+conversion to C++ 
+beta libsdbf API 
+fixed: off-by-one error on last line of query file
+
+---------
+
+New in version 1.7
+
+-c query.sdbf target.sdbf option
+-s sample option
+Support for cygwin
+manpage for sdhash
+make install supported
+fixed: spaces in filenames now readable on input sdbf
+
+---------

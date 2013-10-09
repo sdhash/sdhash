@@ -1,0 +1,228 @@
+=head1 NAME
+
+sdhash - tool for generating and comparing similarity digests
+
+=head1 SYNOPSIS
+
+B<sdhash> [options] [mode] <files>
+
+
+=head1 DESCRIPTION
+
+B<sdhash> is a tool for generating, comparing, and searching similarity digest 
+hashes.  When comparing these hashes, it gives a confidence level as to how similar
+two objects are to each other.  
+
+B<sdhash> uses parallel processing to efficiently process large quantities of data
+and provides options for sampling to speed up queries.   
+
+B<sdhash> has three modes: generation, comparison, and index searching.
+
+=head1 EXAMPLES
+
+B<sdhash> file1 file2 file3...
+
+Generation mode produces digests for the files given on the command line.  
+
+B<sdhash> --compare set1.sdbf set2.sdbf
+
+In comparison mode the contents of two sets of sdbf digests are compared
+to produce a confidence score between -1 and 100.
+
+B<sdhash> --index-search=references/ file1 file2 file3 
+
+Searching a reference set gives how many features in the hashed files
+have matches in the digest indexes. 
+
+=head1 OPTIONS
+
+=over 4
+
+=item B<--verbose> 
+
+Displays (lots of) helpful output on every stage of the hashing process.
+
+=item B<-f>, B<--target-list> <filelist.txt>
+
+Reads list of files to be hashed from given file.  File should be unix formatted 
+with one filename per line. 
+
+=item B<-> 
+
+Reads input to be hashed from stdin.  By default uses 16kb blocks and supports
+threading.
+
+=item B<-r>, B<--deep> 
+
+Searches any directories given at the command line for files to hash, recursively.
+
+=item B<-o>, B<--output> <filename>
+
+When creating hashes or comparing, sends output to named sdbf files and indexes.
+
+=item B<-b>, B<--block-size> <N>
+
+Configures block mode during hash generation.  To disable block mode, use -b 0. 
+Block mode is turned on for any files larger than 16MB, using 16KB blocks.
+We suggest using -b 4 for memory dumps in 4KB blocks.
+
+=item B<-p>, B<--thread-count> <N>
+
+Use N threads.  By default sdhash uses all available cores/threads
+on the local machine.  This may be used to dial back the multithreading.
+
+=item B<-t>, B<--threshold> <-1-100>
+
+Sets a confidence threshold for comparisions.  Use this to filter results
+to reduce false positives.  Used with comparison and query modes. 
+Use '-1' to display all comparisons.
+
+=over 4
+
+B<sdhash> B<--threshold> 10 B<--compare> output.sdbf 
+
+B<sdhash> B<--threshold> '-1' B<--compare> output.sdbf 
+
+=back
+
+=item B<-s>, B<--sample-size> <1-16>
+
+Uses a sampling of filters to perform queries, which speeds up
+query results significantly.  Used for query-mode only.
+
+=item B<-z>, B<--segment-size> <NNN> 
+
+Sets the default segment-size in MB to split files/streams into prior to hashing.  
+Default is 128MB chunks.  Disable segmentation by passing 0 as the argument.
+
+=item B<--separator> <pipe|csv|tab>
+
+Changes the output separator for comparisons.  Default separators is pipe, csv and tab are also supported.  
+
+=item B<--hash-name> <some name> 
+
+Sets the hash name when hashing from stdin.  
+
+=item B<--validate> <files>
+
+Checks if the given sdbf files are valid.
+
+=item B<--config> <sdhash.cfg>
+
+Reads options from configuration file.  Any option from the usage statement
+can be set in the configuration file.
+
+=item B<sdhash.cfg> 
+
+Options to sdhash may be saved in sdhash.cfg in the format of long-option=value.  
+
+For example: 
+
+=over 4
+
+	block-size=16
+	sample-size=4
+	thread-count=4
+	threshold=10
+
+=back
+
+=item B<GENERATION>
+
+
+B<default> <files>
+
+The default mode is generation mode, and will generate similiarity digests of 
+all files given to it on the command line, all files in the list of filenames passed with the
+B<-f> argument, or input from stdin with the B<-> argument. The results are displayed to stdout so that they may be directed to a file for loading into comparisions.
+
+=over 4
+
+B<sdhash> [options] file1 file2 file4 foo* 
+
+=back
+ 
+Using -b will generate block-based hash digests which are useful for processing disk images and memory dumps.
+B<sdhash> automatically generates block-based hash digests for files >=16MB.
+
+=over 4
+
+B<sdhash> B<--block-size> 16 image.dd
+
+=back
+
+=item B<-g>, B<--gen-compare> <files>
+
+This mode generates digests for all files given, and compares them each with all of the others.  It does not save the hashes to disk.
+
+=over 4
+
+B<sdhash> [options] B<-g> file1 file2 file3
+
+
+=back
+
+=item B<COMPARISON>
+
+
+=item B<-c>, B<--compare> <file.sdbf> 
+
+Comparison mode loads a file of digests which was created by capturing the output
+of generation mode.  It then compares each digest to all other digests in the loaded
+file.
+
+=over 4
+
+B<sdhash> B<--compare> hashes.sdbf
+
+=back
+
+=item B<-c>, B<--compare> <query.sdbf> <target.sdbf>
+
+Compare also will load two files of digests, optionally sampling the "query" with the B<-s> 
+option, and compares each digest in the query to each digest in the target.
+
+=over 4
+
+B<sdhash> B<--compare> query.sdbf target.sdbf 
+
+B<sdhash> B<--sample-size> 4 B<--query> query.sdbf target.sdbf 
+
+=back
+
+=item B<SEARCHING>
+
+
+The following set of options is for using the B<sdhash> searching functionality.
+B<sdhash> can generate a reference set upon first hashing which can be used
+to test for the presence of reference data in other sources.  Searching indexes does not generate digests to be saved.
+
+=item B<--index>
+
+Generate a reference set with indexes while hashing.  Can be used with
+B<--output> option only.  This option will split reference data into 640mb
+chunks in the process.
+
+=over 4
+
+B<sdhash> B<--index> B<--deep> directory B<--output> outputdir/name
+
+=back
+
+=item B<--index-search> <directory>
+
+Sets the location of the reference set and indexes for index-searching.
+Searches indexes and returns matches at the set-level.  
+
+=back
+
+
+=head1 AUTHORS
+
+B<sdhash> was written by Vassil Roussev <vassil@roussev.net> and Candice Quates <candice@egobsd.org>. http://sdhash.org/
+
+=head1 LICENSE
+
+B<sdhash> is distributed under the Apache License v2.0
+
+=cut

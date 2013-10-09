@@ -1,0 +1,133 @@
+body {
+	color: black;
+	background-color: #aaaaff;
+	padding: 20px;
+}
+a:link {
+	color: #4444aa;
+	text-decoration:none;
+}
+a:visited {
+	color: #4444aa;
+}
+
+h1 {
+	font-family: Helvetica, Geneva, Arial, sans-serif;
+	font-size: medium;
+}
+
+
+.heading {
+	font-family: Helvetica, Geneva, Arial, sans-serif;
+	font-size: medium;
+	padding: 10px;
+	padding-left: 20px;
+	background-color: #ffffff;
+	margin: 10px;
+
+}
+
+.heading a {
+	color: black;
+}
+
+.subheading {
+	font-family: Helvetica, Geneva, Arial, sans-serif;
+	font-size: medium;
+	padding: 10px;
+	background-color: #eeeeee;
+}
+
+.body {
+	font-family: Helvetica, Geneva, Arial, sans-serif;
+	font-size: small;
+	padding: 20px;
+	line-spacing: single;
+	background-color: white;
+}
+
+.content {
+	font-family: Helvetica, Geneva, Arial, sans-serif;
+	font-size: medium;
+	padding: 20px;
+	background-color: #ffffff;
+	margin: 10px;
+}
+
+.query {
+	font-family: Helvetica, Geneva, Arial, sans-serif;
+	background-color: #ffffff;
+}
+
+
+.dataTables_wrapper {
+	font-size: small;
+	padding: 20px;
+}
+
+.resstatus {
+	font-size: x-small;
+}
+
+
+.myicon {
+	float:left;
+}
+.resultlisting {
+	padding: 10px;
+	margin: 4px;
+	/*border-style:solid;
+	border-color: white; */
+}
+
+/*
+#queryset li {
+	font-family: sans-serif;
+	font-size: small;
+	background-color: #eeeeee;
+	list-style-type:none;
+	padding: 1px;
+}
+#targetset li {
+	font-family: sans-serif;
+	font-size: small;
+	background-color: #eeeeee;
+	list-style-type:none;
+	padding: 1px;
+}
+*/
+
+td.Clickable {
+	font-weight: bold;
+	font-family: courier;
+	text-decoration:underline;
+	text-align:right;
+}
+
+td.Rightside {
+	text-align:right;
+}
+
+#queryset {
+	width: 200px;	
+	list-style-type:none;
+}
+
+#targetset {
+	width: 200px;	
+	list-style-type:none;
+}
+
+
+ul {
+	list-style-type:none;
+	font-size: small;
+	font-family: sans-serif;
+}
+
+#queryset li { margin: 2px; padding: 0.4em; font-size: small; border-style:solid;border-width:0.1em; border-color:gray; }
+#queryset .ui-selecting { background:lightblue; }
+#queryset .ui-selected { background: #0000aa; color: white; }
+#targetset li { margin: 2px; padding: 0.4em; font-size: small; border-style:solid;border-width:0.1em; border-color:gray; }
+#targetset .ui-selecting { background: lightblue; }
+#targetset .ui-selected { background: #0000aa; color: white; }

@@ -1,0 +1,88 @@
+it:=head1 NAME
+
+sdhash-srv - server for storing and generating similarity digest hashes
+
+=head1 SYNOPSIS
+
+B<sdhash-srv> 
+
+=head1 DESCRIPTION
+
+B<sdhash-srv> is a companion server to the sdhash program.  It can
+generate, load, save, and compare sets of hashes.  B<sdhash-mgr> is
+a controller program which can be used for stop/start/status.
+
+To start:
+
+=over 8
+
+B<sdhash-srv>
+
+=back
+
+To stop:
+
+=over 8 
+
+B<sdhash-mgr> stop
+
+=back
+
+=head1 OPTIONS
+
+=over 4
+
+=item B<-C> sdhash-srv.cfg 
+
+The file sdhash-srv.cfg, in the current directory, is used to configure program options.
+A different file may be used by changing the -C option.  All file-based options
+are allowable on the command line as well.
+
+Sample sdhash-srv.cfg file:
+
+=over 8
+
+	connections =20
+	port = 9090
+	threads = 24
+	hashdir = /usr/local/sdhash-home
+	sourcedir = /usr/local/sources
+
+=back
+
+=item B<-d> B<hashdir> 
+
+A directory to store hashes in so that they will be loaded
+at startup.  Default behavior is to search the current directory.
+
+=item B<-s> B<sourcedir> 
+
+A directory to search for source material to be hashed.
+
+=item B<-t> B<threads> 
+
+Sets the maximum hardware threads you can devote to hashing and
+comparison. Default is single-thread operation.
+
+=item B<-P> B<port> 
+
+Sets the tcp port the server should run on.  It's advised that if you
+only intend to run on localhost, that this port is firewalled to allow
+only local connections.  Default port is 9090.
+
+=item B<-c> B<connections> 
+
+Sets the maximum number of tcp connections allowed at once.  Default
+is 20 connections.
+
+=back
+
+=head1 AUTHORS
+
+B<sdhash-srv> was written by Vassil Roussev <vassil@roussev.net> and Candice Quates <candice@egobsd.org>. http://sdhash.org 
+
+=head1 LICENSE
+
+B<sdhash> is distributed under the Apache License v2.0
+
+=cut

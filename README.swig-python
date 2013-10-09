@@ -1,0 +1,20 @@
+Swig-python bindings are experimental but I have gotten them
+to work on both linux and cygwin, though with slight changes.
+
+There are makefile hooks for "make swig-py" and "make swig-py-win" 
+which should be run after sdhash has been built and libsdbf.a is present.
+Boost should build itself in the regular make process.
+
+Once make swig-py has been run, cd into the swig/python directory in 
+the root sdhash dir, and try out test.py.  The _sdbf_class.so file 
+can probably be put in wherever python modules are supposed to go,
+for global usage.
+
+On cygwin we create _sdbf_class.dll which seems to link in
+with python better than _sdbf_class.so.
+
+I have heavily commented the test.py script to serve as an example.
+
+I have not exposed the C++ set operations to python as I feel
+it would be more appropriate to use native language containers for
+our objects.  
