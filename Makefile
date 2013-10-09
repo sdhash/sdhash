@@ -6,11 +6,9 @@ INSTDIR=$(PREFIX)/bin
 MANDIR=$(PREFIX)/share/man/man1
 
 
-SDBF_SRC = sdbf/sdbf_class.cc sdbf/sdbf_core.cc sdbf/map_file.cc sdbf/entr64.cc sdbf/base64.cc sdbf/bf_utils.cc sdbf/error.cc sdbf/sdbf_conf.cc sdbf/sdbf_set.cc base64/modp_b64.cc sdbf/bloom_filter.cc lz4/lz4.cc sdbf/bloom_vector.cc sdbf/blooms.pb.cc
+SDBF_SRC = sdbf/sdbf_class.cc sdbf/sdbf_core.cc sdbf/map_file.cc sdbf/entr64.cc sdbf/base64.cc sdbf/bf_utils.cc sdbf/error.cc sdbf/sdbf_conf.cc sdbf/sdbf_set.cc base64/modp_b64.cc sdbf/bloom_filter.cc lz4/lz4.cc 
 
 SDHASH_SRC = sdhash-src/sdhash.cc sdhash-src/sdhash_threads.cc 
-
-SDHASH_MR = sdhash-src/sdhash-mr.cc 
 
 CC = g++
 LD = $(CC)
@@ -22,11 +20,10 @@ else
 CFLAGS = -fPIC -fopenmp -msse4.2 -O0 -g -D_FILE_OFFSET_BITS=64 -D_LARGE_FILE_API -D_BSD_SOURCE -I./external -Wall
 endif
 
-LDFLAGS = -fopenmp -L . -L./external/stage/lib -lboost_system -lboost_filesystem -lboost_program_options -lc -lm -lcrypto -lboost_thread -lpthread -lprotobuf
+LDFLAGS = -fopenmp -L . -L./external/stage/lib -lboost_system -lboost_filesystem -lboost_program_options -lc -lm -lcrypto -lboost_thread -lpthread
 
 SDHASH_OBJ = $(SDHASH_SRC:.cc=.o)
 SDBF_OBJ = $(SDBF_SRC:.cc=.o)
-SDHASH_MR_OBJ = $(SDHASH_MR:.cc=.o)
 
 LIBSDBF=libsdbf.a
 
@@ -85,8 +82,6 @@ $(LIBSDBF): $(SDBF_OBJ)
 stream: $(SDHASH_OBJ) $(LIBSDBF)
 	$(LD) $(SDHASH_OBJ) $(SDHASH_CLIENT_OBJ) $(LIBSDBF) -o sdhash $(LDFLAGS) 
 
-sdhash-mr: $(SDHASH_MR_OBJ) $(LIBSDBF)
-	$(LD) $(SDHASH_MR_OBJ) $(LIBSDBF) -o sdhash-mr $(LDFLAGS) 
 boost: 
 	cd external ; ./bootstrap.sh --with-python=python2 ; ./b2 link=static cxxflags='-fPIC -std=c++0x' ; cd -
 

@@ -325,9 +325,6 @@ sdbf::to_string () const { // write self to stream
         }
     }
     hash << endl;
-    //this->big_filter->set_name((string)this->hashname);
-    //hash << this->big_filter->to_string()  ;
-    //hash << endl;
     return hash.str();
 }
 
@@ -372,10 +369,6 @@ sdbf::sdbf_create(const char *name) {
     this->buffer = NULL;
     this->info=NULL;
     this->filenamealloc=false;
-    // testing: empty "big filter" for creation  -- start with 1
-    this->big_filters=new vector<bloom_filter*>();
-    bloom_filter *tmp=new bloom_filter(BIGFILTER,5,160,0.01);
-    this->big_filters->push_back(tmp);
 }
 
 

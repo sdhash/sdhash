@@ -1,5 +1,5 @@
 // bloom_filter class implementation
-//
+// author: candice quates
 
 #include "bloom_filter.h"
 

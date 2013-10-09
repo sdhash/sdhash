@@ -112,8 +112,6 @@ private:
     uint32_t  dd_block_size; // Size of the base block in dd mode
     uint64_t orig_file_size; // size of the original file
     bool     filenamealloc;
-public:
-    std::vector<class bloom_filter *> *big_filters;
 
 };
 

@@ -7,7 +7,6 @@
 #include "bloom_filter.h"
 #include "util.h"
 #include "sdbf_set.h"
-#include "blooms.pb.h"  // for --multi output
 
 #include <boost/filesystem.hpp>
 

@@ -1,6 +1,6 @@
 /**
  * bf_utils.c: Bloom filter utilities
- * author: Vassil Roussev
+ * author: Vassil Roussev, Candice Quates (popc)
  */
 
 #include <math.h>

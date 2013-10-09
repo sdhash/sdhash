@@ -112,14 +112,9 @@ sdbf::gen_chunk_hash( uint8_t *file_buffer, const uint64_t chunk_pos, const uint
                         if (ins==false)
                             continue;
                     }
-// new style big filters...
-bool inserted=this->big_filters->back()->insert_sha1((uint32_t*)sha1_hash);
-if (inserted==false) 
-    continue;
                 last_count++;
                 if( last_count == this->max_elem) {
                     curr_bf += this->bf_size;  
-                    //this->big_filters->push_back(new bloom_filter(BIGFILTER,5,160,0.01));
                     bf_count++;
                     last_count = 0;
                 } 

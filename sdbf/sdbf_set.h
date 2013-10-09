@@ -8,7 +8,6 @@
 #include "sdbf_class.h"
 #include "bloom_filter.h"
 #include "util.h"
-#include "blooms.pb.h"
 
 
 /// sdbf_set class

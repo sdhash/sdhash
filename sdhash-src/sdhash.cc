@@ -6,7 +6,6 @@
 #include "../sdbf/sdbf_class.h"
 #include "../sdbf/sdbf_defines.h"
 #include "../sdbf/sdbf_set.h"
-#include "../sdbf/blooms.pb.h"
 #include "sdhash_threads.h"
 #include "sdhash.h"
 #include "version.h"
@@ -54,51 +53,6 @@ results_to_file(string results, string resfilename) {
     return 0;
 }
 
-int 
-serialize_to_file(sdbf_set *set1, string output_name){
-    fstream writeout(output_name.c_str(),ios::out|ios::trunc|ios::binary);
-    if (!writeout.is_open()) {
-        cerr << "sdhash: ERROR cannot write to file " << output_name << endl;
-        return -1;
-    }
-    blooms::BloomVector tmpvect;
-    blooms::BloomFilter *tmp=new blooms::BloomFilter();
-    for (uint32_t n=0;n< set1->size(); n++)  {
-        tmpvect.Clear();
-        uint fcount=set1->at(n)->big_filters->size();
-        tmpvect.set_name(set1->at(n)->name());
-        tmpvect.set_id(n);
-        tmpvect.set_filter_count(fcount);
-        tmpvect.set_filesize(set1->at(n)->input_size());
-        string outvect;
-        tmpvect.SerializeToString(&outvect);
-        int size=outvect.length();
-        writeout.write((char*)&size,sizeof(size));
-        writeout.write(outvect.c_str(),size);
-        for (int i=0; i< fcount ; i++) { 
-            //blooms::BloomFilter *tmp=new blooms::BloomFilter();
-            tmp->Clear();
-            tmp->set_bf_size(set1->at(n)->big_filters->at(i)->bf_size) ;    
-            tmp->set_max_elem(set1->at(n)->big_filters->at(i)->max_elem) ;    
-            tmp->set_elem_count(set1->at(n)->big_filters->at(i)->elem_count()) ;    
-            tmp->set_id(n);
-            tmp->set_name(set1->at(n)->name());
-            uint64_t* b64tmp=(uint64_t*)set1->at(n)->big_filters->at(i)->bf;
-            for (int j=0; j < tmp->bf_size() / 8 ; j++) {
-                tmp->add_filter(b64tmp[j]);
-            }    
-//            cout << endl<< tmp->filter_size() << endl;
-            string outfil;
-            tmp->SerializeToString(&outfil);
-            int sizef=outfil.length();
-            writeout.write((char*)&sizef,sizeof(sizef));
-            writeout.write(outfil.c_str(),sizef);
-        }
-    }
-    writeout.close();
-    return 0;
-}
-
 /** sdhash program main
 */
 int main( int argc, char **argv) {
@@ -138,7 +92,6 @@ int main( int argc, char **argv) {
                 ("index-search",po::value<std::string>(&idx_dir),"search directory of reference indexes")
                 ("config-file", po::value<string>(&config_file)->default_value("sdhash.cfg"), "use config file")
                 ("verbose","warnings, debug and progress output")
-                ("multi","TESTING multi-res sdhash output")
                 //("log",po::value<std::string>(&logfile),"verbose to a log file")
                 ("version","show version info")
                 ("help,h","produce help message")
@@ -489,12 +442,12 @@ int main( int argc, char **argv) {
                 strncpy(smalllist[i],small[i].c_str(),small[i].length()+1);
             }
             if (sdbf_sys.dd_block_size < 1 )  {
-                if (vm.count("gen-compare") || vm.count("output")||vm.count("index-search")||vm.count("multi")) // if we need to save this set for comparison
+                if (vm.count("gen-compare") || vm.count("output")||vm.count("index-search")) // if we need to save this set for comparison
                     sdbf_hash_files( smalllist, smallct, sdbf_sys.thread_cnt,set1, info);
                 else 
                     sdbf_hash_files( smalllist, smallct, sdbf_sys.thread_cnt,NULL, info);
             } else {
-                if (vm.count("gen-compare") || vm.count("output")||vm.count("index-search")||vm.count("multi"))
+                if (vm.count("gen-compare") || vm.count("output")||vm.count("index-search"))
                     sdbf_hash_files_dd( smalllist, smallct, sdbf_sys.dd_block_size*KB,sdbf_sys.segment_size, set1, info);
                 else 
                     sdbf_hash_files_dd( smalllist, smallct, sdbf_sys.dd_block_size*KB,sdbf_sys.segment_size, NULL, info);
@@ -510,7 +463,7 @@ int main( int argc, char **argv) {
                 strncpy(largelist[i],large[i].c_str(),large[i].length()+1);
             }
             if (sdbf_sys.dd_block_size == 0 ) {
-                if (vm.count("gen-compare")||vm.count("output")||vm.count("multi")) // if we need to save this set for comparison
+                if (vm.count("gen-compare")||vm.count("output")) // if we need to save this set for comparison
                     sdbf_hash_files( largelist, largect, sdbf_sys.thread_cnt,set1, info);
                 else
                     sdbf_hash_files( largelist, largect, sdbf_sys.thread_cnt,NULL, info);
@@ -518,12 +471,12 @@ int main( int argc, char **argv) {
                 if (sdbf_sys.dd_block_size == -1) { 
                     if (sdbf_sys.warnings || sdbf_sys.verbose) 
                        cerr << "sdhash: Warning: files over 16MB are being hashed in block mode. Use -b 0 to disable." << endl;
-                    if (vm.count("gen-compare")|| vm.count("output") ||vm.count("index-search")||vm.count("multi")) // if we need to save this set for comparison
+                    if (vm.count("gen-compare")|| vm.count("output") ||vm.count("index-search")) // if we need to save this set for comparison
                         sdbf_hash_files_dd( largelist, largect, 16*KB,sdbf_sys.segment_size, set1, info);
                     else
                         sdbf_hash_files_dd( largelist, largect, 16*KB,sdbf_sys.segment_size, NULL, info);
                 } else {
-                    if (vm.count("gen-compare")||vm.count("output") ||vm.count("index-search")||vm.count("multi")) // if we need to save this set for comparison
+                    if (vm.count("gen-compare")||vm.count("output") ||vm.count("index-search")) // if we need to save this set for comparison
                         sdbf_hash_files_dd( largelist, largect, sdbf_sys.dd_block_size*KB,sdbf_sys.segment_size, set1, info);
                     else 
                         sdbf_hash_files_dd( largelist, largect, sdbf_sys.dd_block_size*KB,sdbf_sys.segment_size, NULL, info);
@@ -556,17 +509,12 @@ int main( int argc, char **argv) {
             // search-index is not hashing to files.  
             if (vm.count("index-search")) {
                 results_to_file(set1->index_results(),output_name+".idx-result");
-            } else if (vm.count("multi")) {
-                int success=serialize_to_file(set1,output_name+".mr");
             } else { 
                 results_to_file(set1->to_string(),output_name+".sdbf");
             }
         } else {
             if (vm.count("index-search")) {
                 cerr << set1->index_results();
-            } else if (vm.count("multi")) {
-                //cout << set1->to_multi() ;
-                cerr << "Multi-res needs to file"<< endl;
             }
         }
     }
