@@ -8,7 +8,6 @@
 #include "../sdbf/sdbf_set.h"
 #include "sdhash_threads.h"
 #include "sdhash.h"
-#include "version.h"
 
 #include "boost/filesystem.hpp"
 #include "boost/program_options.hpp"
@@ -131,7 +130,7 @@ int main( int argc, char **argv) {
         }
 
         if (vm.count("version")) {
-            cout << VERSION_INFO << ", rev " << REVISION  << endl;
+            cout << VERSION_INFO << endl;
             return 0;
         }
         if (vm.count("verbose")) {

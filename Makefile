@@ -47,9 +47,6 @@ install-server: install server
 	cp sdhash-server/sdhash-mgr $(INSTDIR)
 	cp sdhash-server/sdhash-cli $(INSTDIR)
 
-version: 
-	echo "#define REVISION \"`svnversion`\"" > sdhash-src/version.h
-
 man: man/sdhash.1 man/sdhash-cli.1 man/sdhash-srv.1
 
 docs: 
