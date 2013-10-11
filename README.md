@@ -15,5 +15,7 @@ In version correlation, we are interested in correlating data objects (files) th
 In all cases, the use of the tool is the same, however the interpretation may differ based on the circumstances.
 
 For more information:  
+
 Tutorial: http://roussev.net/sdhash/tutorial/sdhash-tutorial.html
+
 Papers/Version history/etc:  http://sdhash.org/
