@@ -14,7 +14,29 @@ In version correlation, we are interested in correlating data objects (files) th
 
 In all cases, the use of the tool is the same, however the interpretation may differ based on the circumstances.
 
-For more information:  
+Current version info: 
+
+sdhash 3.4 by Vassil Roussev, Candice Quates 10/2013
+Usage: sdhash <options> <files>
+  -r [ --deep ]                   generate SDBFs from directories and files
+  -f [ --target-list ]            generate SDBFs from list(s) of filenames
+  -c [ --compare ]                compare SDBFs in file, or two SDBF files
+  -g [ --gen-compare ]            compare all pairs in source data
+  -t [ --threshold ] arg (=1)     only show results >=threshold
+  -b [ --block-size ] arg         hashes input files in nKB blocks
+  -p [ --threads ] arg            restrict compute threads to N threads
+  -s [ --sample-size ] arg (=0)   sample N filters for comparisons
+  -z [ --segment-size ] arg       set file segment size, 128MB default
+  -o [ --output ] arg             send output to files
+  --separator arg (=pipe)         for comparison results: pipe csv tab
+  --hash-name arg                 set name of hash on stdin
+  --validate                      parse SDBF file to check if it is valid
+  --index                         generate indexes while hashing
+  --index-search arg              search directory of reference indexes
+  --config-file arg (=sdhash.cfg) use config file
+  --verbose                       warnings, debug and progress output
+  --version                       show version info
+  -h [ --help ]                   produce help message
 
 Tutorial: http://roussev.net/sdhash/tutorial/sdhash-tutorial.html
 
