@@ -19,7 +19,7 @@ SDSRC = src/sdhash-srv-main.cc src/set_list.cc src/sdhash-srv-opts.cc
 default: server client manager
 
 server: ${SDSRC}
-	$(CC) -O0 -g -o sdhash-srv ${INCLUDES} ${COMMON_DEF} ${LDFLAGS}  ${SDSRC} ${SRC} -lthrift -lsdbf -lpthread -lboost_program_options -lboost_filesystem -lboost_system -lboost_thread -lcrypto
+	$(CC) -O2 -o sdhash-srv ${INCLUDES} ${COMMON_DEF} ${LDFLAGS}  ${SDSRC} ${SRC} -lthrift -lsdbf -lpthread -lboost_program_options -lboost_filesystem -lboost_system -lboost_thread -lcrypto
 
 manager: src/sdhash-mgr.cc
 	$(CC) -O2 -o sdhash-mgr ${INCLUDES} ${COMMON_DEF}  ${LDFLAGS} src/sdhash-mgr.cc ${SRC} -lthrift 

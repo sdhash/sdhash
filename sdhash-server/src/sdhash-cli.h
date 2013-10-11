@@ -19,7 +19,7 @@
 //#include "../sdbf/sdbf_class.h"
 
 #define SDBF_VERSION    3 
-#define VERSION_INFO    "sdhash-cli 3.3 by Vassil Roussev, Candice Quates, 07/2013"
+#define VERSION_INFO    "sdhash-cli 3.4 by Vassil Roussev, Candice Quates [10/2013]"
 
 // Defaults
 

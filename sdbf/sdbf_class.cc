@@ -149,6 +149,8 @@ sdbf::sdbf(const std::string& str) {
     std::stringstream ss(str);
     string magic,process;
     std::getline(ss,magic,':');
+    if (magic.compare(0,4,"sdbf")) 
+        throw -2;  // invalid format
     std::getline(ss,process,':');
     std::getline(ss,process,':'); 
     std::getline(ss,process,':'); // copy+allocate in

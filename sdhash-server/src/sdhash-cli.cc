@@ -13,7 +13,6 @@
 #include <boost/filesystem.hpp>
 #include <fstream>
 #include <iostream>
-#include "../sdhash-src/version.h"
 
 #include "sdhashsrv.h"
 
@@ -113,14 +112,14 @@ int main( int argc, char **argv) {
 
         std::ifstream ifs(config_file.c_str());
         if (vm.count("help")) {
-            std::cout << VERSION_INFO << ", rev " << REVISION << std::endl;
+            std::cout << VERSION_INFO << std::endl;
             std::cout << "Usage: sdhash-cli <options> <source files>|<hash files>"<< std::endl;
             std::cout << config << std::endl;
             return 0;
         }
 
         if (vm.count("version")) {
-            std::cout << VERSION_INFO << ", rev " << REVISION << std::endl;
+            std::cout << VERSION_INFO << std::endl;
             std::cout << "       http://sdhash.org, license Apache v2.0" << std::endl;
             return 0;
         }
@@ -181,7 +180,7 @@ int main( int argc, char **argv) {
         }    
     }
     if (sdbf_sys.options == 0) {
-        std::cout << VERSION_INFO << ", rev " << REVISION << std::endl;
+        std::cout << VERSION_INFO << std::endl;
         std::cout << "Usage: sdhash-cli <options> <source files>|<hash files>"<< std::endl;
         std::cout << config << std::endl;
     return 0;
