@@ -29,7 +29,7 @@ In all cases, the use of the tool is the same, however the interpretation may
 differ based on the circumstances.
 
 Current version info: 
-
+<pre>
 sdhash 3.4 by Vassil Roussev, Candice Quates [sdhash.org] 10/2013
 Usage: sdhash <options> <files>
   -r [ --deep ]                   generate SDBFs from directories and files
@@ -51,7 +51,7 @@ Usage: sdhash <options> <files>
   --verbose                       warnings, debug and progress output
   --version                       show version info
   -h [ --help ]                   produce help message
-
+</pre>
 Tutorial: http://roussev.net/sdhash/tutorial/sdhash-tutorial.html
 
 Papers/Version history/etc:  http://sdhash.org/
