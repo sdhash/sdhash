@@ -12,6 +12,12 @@ reference.
 For Linux, you wil need to have the CUDA toolkit installed,
 and build the program using the included Makefile.
 
+Updated status October 11 2013:
+
+Major, major reduction speedup due to new approach to warp 
+allocation.  Also gained a speedup in the application of the cutoff.
+Speeds reduced by as much as 12 seconds on a 28 second query.
+
 Updated status April 5 2013:
 
 Comparisons with sped-up reductions, command line arguments,
