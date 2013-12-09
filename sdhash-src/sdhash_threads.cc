@@ -5,6 +5,9 @@
 
 #include "../sdbf/sdbf_class.h"
 #include "../sdbf/sdbf_defines.h"
+#include "../sdbf/bloom_vector.h"
+#include "../sdbf/bloom_filter.h"
+#include "../sdbf/blooms.pb.h"
 #include "sdhash.h"
 
 #include <iostream>
@@ -24,6 +27,124 @@ namespace fs = boost::filesystem;
 extern sdbf_parameters_t sdbf_sys;
 
 
+
+int
+read_bloom_vectors(std::vector<bloom_vector *> &set,string filename, bool details) {
+    try {
+        fstream fs(filename.c_str(),ios::in|ios::binary);
+        if (!fs) {
+            cerr << "Protobuf Fail Open "<< endl;
+            return -1;
+        }
+        int size=0;
+        blooms::BloomVector vect; // temporary buffers
+        blooms::BloomFilter filter;
+        while (!fs.eof()) {
+            fs.read((char*)&size,sizeof(size));
+            char *buf=(char*)malloc(size*sizeof(char));
+            fs.read(buf,size);
+            if (!fs)
+                break; // eof
+            string readme;
+            readme.assign(buf,size);
+            vect.ParseFromString(readme);
+            free(buf);
+            bloom_vector *tmp=new bloom_vector(&vect);
+            for (int i=0;i<vect.filter_count();i++) {
+                int fsize;
+                fs.read((char*)&fsize,sizeof(fsize));
+                char *filtbuf=(char*)malloc(fsize*sizeof(char));
+                fs.read(filtbuf,fsize);
+                if (!fs)
+                    break; // eof
+                // trickery with strings is necessary!!!
+                string readstr;
+                readstr.assign(filtbuf,fsize);
+                filter.ParseFromString(readstr);
+                tmp->add_filter(&filter);
+                free(filtbuf);
+                filter.Clear();
+            }
+            if (details) {
+                cout << tmp->details() << endl;
+            }
+            set.push_back(tmp);
+            vect.Clear();
+        }
+        fs.close();
+    } catch (int e) {
+        cerr << "sdhash: ERROR: Could not load SDBF-LG file "<< filename << ". Exiting"<< endl;
+        return -1;
+    }
+    return 0;
+}
+
+string
+compare_bloom_vectors(std::vector<bloom_vector *> &set,string sep,int threshold, bool quiet) {
+    std::stringstream ss;
+    int end=set.size();
+    cout.fill(0);
+    ss.fill(0);
+    #pragma omp parallel for
+    for (int i = 0; i < end ; i++) {
+        for (int j = i; j < end ; j++) {
+            if (i == j) continue;
+               int32_t score = set.at(i)->compare(set.at(j),0);
+               if (score >= threshold)  {
+                   #pragma omp critical
+                   {
+                   if (!quiet)
+                       cout << set.at(i)->items->at(0)->name() << sep << set.at(j)->items->at(0)->name() ;
+                   ss << set.at(i)->items->at(0)->name() << sep << set.at(j)->items->at(0)->name() ;
+                   if (score != -1) {
+                       if (!quiet)
+                           cout << sep << setw (3) << score << std::endl;
+                       ss << sep << setw (3) << score << std::endl;
+                   } else {
+                       if (!quiet)
+                           cout << sep <<  score << std::endl;
+                       ss << sep <<  score << std::endl;
+                   }
+                   }
+               }
+          }
+    }
+    return ss.str();
+}
+
+
+string
+compare_two_bloom_vectors(std::vector<bloom_vector *> &set, std::vector<bloom_vector *> &set2,string sep,int threshold, bool quiet) {
+    std::stringstream ss;
+    int tend=set.size();
+    int qend=set2.size();
+    cout.fill(0);
+    ss.fill(0);
+    #pragma omp parallel for
+    for (int i = 0; i < tend ; i++) {
+        for (int j = i; j < qend ; j++) {
+               int32_t score = set.at(i)->compare(set2.at(j),0);
+               if (score >= threshold)  {
+                   #pragma omp critical
+                   {
+                   if (!quiet)
+                       cout << set.at(i)->items->at(0)->name() << sep << set2.at(j)->items->at(0)->name() ;
+                   ss << set.at(i)->items->at(0)->name() << sep << set2.at(j)->items->at(0)->name() ;
+                   if (score != -1) {
+                       if (!quiet)
+                           cout << sep << setw (3) << score << std::endl;
+                       ss << sep << setw (3) << score << std::endl;
+                   } else {
+                       if (!quiet)
+                           cout << sep <<  score << std::endl;
+                       ss << sep <<  score << std::endl;
+                   }
+                   }
+               }
+          }
+    }
+    return ss.str();
+}
 // NOT in sdbf class
 /** 
     the actual processing task for the file-list hashing without block mode

@@ -17,7 +17,7 @@
 #include "../sdbf/sdbf_class.h"
 
 #define SDBF_VERSION    3 
-#define VERSION_INFO    "sdhash 3.4 by Vassil Roussev, Candice Quates [sdhash.org] 10/2013"
+#define VERSION_INFO    "sdhash 4.0 by Vassil Roussev, Candice Quates [sdhash.org] 12/2013"
 
 
 // Command line options

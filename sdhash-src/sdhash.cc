@@ -6,6 +6,9 @@
 #include "../sdbf/sdbf_class.h"
 #include "../sdbf/sdbf_defines.h"
 #include "../sdbf/sdbf_set.h"
+#include "../sdbf/blooms.pb.h"
+#include "../sdbf/bloom_vector.h"
+#include "../sdbf/bloom_filter.h"
 #include "sdhash_threads.h"
 #include "sdhash.h"
 
@@ -52,6 +55,49 @@ results_to_file(string results, string resfilename) {
     return 0;
 }
 
+int 
+serialize_to_file(sdbf_set *set1, string output_name){
+    fstream writeout(output_name.c_str(),ios::out|ios::trunc|ios::binary);
+    if (!writeout.is_open()) {
+        cerr << "sdhash: ERROR cannot write to file " << output_name << endl;
+        return -1;
+    }
+    blooms::BloomVector tmpvect;
+    blooms::BloomFilter *tmp=new blooms::BloomFilter();
+    for (uint32_t n=0;n< set1->size(); n++)  {
+        tmpvect.Clear();
+        uint32_t fcount=set1->at(n)->big_filters->size();
+        tmpvect.set_name(set1->at(n)->name());
+        tmpvect.set_id(n);
+        tmpvect.set_filter_count(fcount);
+        tmpvect.set_filesize(set1->at(n)->input_size());
+        string outvect;
+        tmpvect.SerializeToString(&outvect);
+        int size=outvect.length();
+        writeout.write((char*)&size,sizeof(size));
+        writeout.write(outvect.c_str(),size);
+        for (uint32_t i=0; i< fcount ; i++) { 
+            tmp->Clear();
+            tmp->set_bf_size(set1->at(n)->big_filters->at(i)->bf_size) ;    
+            tmp->set_max_elem(set1->at(n)->big_filters->at(i)->max_elem) ;    
+            tmp->set_elem_count(set1->at(n)->big_filters->at(i)->elem_count()) ; 
+            tmp->set_id(n);
+            tmp->set_name(set1->at(n)->name());
+            uint64_t* b64tmp=(uint64_t*)set1->at(n)->big_filters->at(i)->bf;
+            for (uint32_t j=0; j < tmp->bf_size() / 8 ; j++) {
+                tmp->add_filter(b64tmp[j]);
+            }    
+            string outfil;
+            tmp->SerializeToString(&outfil);
+            int sizef=outfil.length();
+            writeout.write((char*)&sizef,sizeof(sizef));
+            writeout.write(outfil.c_str(),sizef);
+        }
+    }
+    writeout.close();
+    return 0;
+}
+
 /** sdhash program main
 */
 int main( int argc, char **argv) {
@@ -86,7 +132,10 @@ int main( int argc, char **argv) {
                 ("output,o",po::value<std::string>(&output_name),"send output to files")
                 ("separator",po::value<std::string>(&separator)->default_value("pipe"),"for comparison results: pipe csv tab")
                 ("hash-name",po::value<std::string>(&input_name),"set name of hash on stdin")
+                ("fast","shrink sdbf filters for speedup")
+                ("large","create larger (1M content) filters")
                 ("validate","parse SDBF file to check if it is valid")
+                ("details","parse SDBF-LG file for contents")
                 ("index","generate indexes while hashing")
                 ("index-search",po::value<std::string>(&idx_dir),"search directory of reference indexes")
                 ("config-file", po::value<string>(&config_file)->default_value("sdhash.cfg"), "use config file")
@@ -209,74 +258,139 @@ int main( int argc, char **argv) {
                  indexlist.push_back(indextest);
                  sdbf_set *tmp=new sdbf_set((idx_dir+"/"+itr->path().stem().string()).c_str());
                  setlist.push_back(tmp);
-         tmp->index=indextest;
+                 tmp->index=indextest;
               }
             }
         }
     if (sdbf_sys.verbose)
         cerr << "done"<< endl;
     }
+    bool fast=false;
+    if (vm.count("fast")) {
+        fast=true;
+        if (!sdbf::config->popcnt) {
+            cerr << "SDHASH: popcnt capable processor required for fast mode comparisons" << endl;
+            return -1;
+        }
+    }
+    if (vm.count("large")) {
+        if (!sdbf::config->popcnt) {
+            cerr << "SDHASH: popcnt capable processor required for large mode comparisons" << endl;
+            return -1;
+        }
+    }
     // Perform all-pairs comparison
     if (vm.count("compare")) {
+        string localsep="|";
+        if (vm.count("separator")) {
+            if (separator.compare("csv")==0) {
+                localsep=",";
+            } else if (separator.compare("tab")==0) {
+                localsep="\t";
+            } else if (separator.compare("tabs")==0) {
+                localsep="\t";
+            }
+        }
         if (inputlist.size()==1) {
             // load first set
-            try {
-                delete set1;
-                set1=new sdbf_set(inputlist[0].c_str());
-                if (vm.count("separator")) {
-                    if (separator.compare("csv")==0) {
-                        set1->set_separator(',');
-                    } else if (separator.compare("tab")==0) {
-                        set1->set_separator('\t');
-                    } else if (separator.compare("tabs")==0) {
-                        set1->set_separator('\t');
-                    }
+            if (vm.count("large")){
+                std::vector<bloom_vector*> setL1; 
+                if (!fs::is_regular_file(inputlist[0]))  {
+                    cerr << "sdhash: ERROR file " << inputlist[0] << " not readable or not found." << endl;
+                    return -1;
                 }
-            } catch (int e) {
-                cerr << "sdhash: ERROR: Could not load SDBF file "<< inputlist[0] << ". Exiting"<< endl;
-                return -1;
-            }
-            if (vm.count("output")) {
-                string results=set1->compare_all_quiet(sdbf_sys.output_threshold,sdbf_sys.thread_cnt);
-                results_to_file(results,output_name+".compare");
+                int result=read_bloom_vectors(setL1,inputlist[0],false);
+                if (result!=0)  {
+                    cerr << "sdhash: ERROR: Could not load file of SDBFs, "<< inputlist[0] <<" is empty or invalid."<< endl;
+                    return -1;
+                }
+                if (vm.count("output")) {
+                    string results=compare_bloom_vectors(setL1,localsep,sdbf_sys.output_threshold,true);
+                    results_to_file(results,output_name+".compare");
+                } else {
+                    string results=compare_bloom_vectors(setL1,localsep,sdbf_sys.output_threshold,false);
+                }
             } else {
-                set1->compare_all(sdbf_sys.output_threshold);
+                try {
+                    delete set1;
+                    set1=new sdbf_set(inputlist[0].c_str());
+                    if (vm.count("separator")) {
+                        set1->set_separator(localsep[0]);
+                    }
+                } catch (int e) {
+                    cerr << "sdhash: ERROR: Could not load SDBF file "<< inputlist[0] << ". Exiting"<< endl;
+                    return -1;
+                }
+                if (vm.count("output")) {
+                    string results=set1->compare_all_quiet(sdbf_sys.output_threshold,sdbf_sys.thread_cnt,fast);
+                    results_to_file(results,output_name+".compare");
+                } else {
+                    set1->compare_all(sdbf_sys.output_threshold,fast);
+                }
             }
         } else if (inputlist.size()==2) {
-            try {
-                delete set1;
-                set1=new sdbf_set(inputlist[0].c_str());
-            } catch (int e) {
-                cerr << "sdhash: ERROR: Could not load SDBF file "<< inputlist[0] << ". Exiting"<< endl;
-                return -1;
-            }
-            // load second set for comparison
-            try {
-                delete set2;
-                set2=new sdbf_set(inputlist[1].c_str());
-                if (vm.count("separator")) {
-                    if (separator.compare("csv")==0) {
-                        set1->set_separator(',');
-                        set2->set_separator(',');
-                    } else if (separator.compare("tab")==0) {
-                        set1->set_separator('\t');
-                        set2->set_separator('\t');
-                    } else if (separator.compare("tabs")==0) {
-                        set1->set_separator('\t');
-                        set2->set_separator('\t');
-                    }
+            if (vm.count("large")){
+                std::vector<bloom_vector*> setL1,setL2; 
+                if (!fs::is_regular_file(inputlist[0]))  {
+                    cerr << "sdhash: ERROR file " << inputlist[0] << " not readable or not found." << endl;
+                    return -1;
                 }
-            } catch (int e) {
-                cerr << "sdhash: ERROR: Could not load SDBF file "<< inputlist[1] << ". Exiting"<< endl;
-                return -1;
-            }
-            if (vm.count("output")) {
-                string results=set1->compare_to_quiet(set2,sdbf_sys.output_threshold,
-                                                      sdbf_sys.sample_size,sdbf_sys.thread_cnt);
-                results_to_file(results,output_name+".compare");
-            }
-            else {
-                set1->compare_to(set2,sdbf_sys.output_threshold, sdbf_sys.sample_size);
+                if (!fs::is_regular_file(inputlist[1]))  {
+                    cerr << "sdhash: ERROR file " << inputlist[1] << " not readable or not found." << endl;
+                    return -1;
+                }
+                int result=read_bloom_vectors(setL1,inputlist[0],false);
+                if (result!=0)  {
+                    cerr << "sdhash: ERROR: Could not load file of SDBFs, "<< inputlist[0] <<" is empty or invalid."<< endl;
+                    return -1;
+                }
+                result=read_bloom_vectors(setL2,inputlist[1],false);
+                if (result!=0)  {
+                    cerr << "sdhash: ERROR: Could not load file of SDBFs, "<< inputlist[0] <<" is empty or invalid."<< endl;
+                    return -1;
+                }
+                if (vm.count("output")) {
+                    string results=compare_two_bloom_vectors(setL1,setL2,localsep,sdbf_sys.output_threshold,true);
+                    results_to_file(results,output_name+".compare");
+                } else {
+                    string results=compare_two_bloom_vectors(setL1,setL2,localsep,sdbf_sys.output_threshold,false);
+                }
+            } else {
+                try {
+                    delete set1;
+                    set1=new sdbf_set(inputlist[0].c_str());
+                } catch (int e) {
+                    cerr << "sdhash: ERROR: Could not load SDBF file "<< inputlist[0] << ". Exiting"<< endl;
+                    return -1;
+                }
+                // load second set for comparison
+                try {
+                    delete set2;
+                    set2=new sdbf_set(inputlist[1].c_str());
+                    if (vm.count("separator")) {
+                        if (separator.compare("csv")==0) {
+                            set1->set_separator(',');
+                            set2->set_separator(',');
+                        } else if (separator.compare("tab")==0) {
+                            set1->set_separator('\t');
+                            set2->set_separator('\t');
+                        } else if (separator.compare("tabs")==0) {
+                            set1->set_separator('\t');
+                            set2->set_separator('\t');
+                        }
+                    }
+                } catch (int e) {
+                    cerr << "sdhash: ERROR: Could not load SDBF file "<< inputlist[1] << ". Exiting"<< endl;
+                    return -1;
+                }
+                if (vm.count("output")) {
+                    string results=set1->compare_to_quiet(set2,sdbf_sys.output_threshold,
+                                                          sdbf_sys.sample_size,sdbf_sys.thread_cnt,fast);
+                    results_to_file(results,output_name+".compare");
+                }
+                else {
+                    set1->compare_to(set2,sdbf_sys.output_threshold, sdbf_sys.sample_size,fast);
+                }
             }
         } else  {
             cerr << "sdhash: ERROR: Comparison requires 1 or 2 arguments." << endl;
@@ -323,6 +437,21 @@ int main( int argc, char **argv) {
         }
         free(info);
         return 0;
+    }
+    if (vm.count("details")) {
+        std::vector<bloom_vector*> setL; 
+        for (uint32_t i=0; i< inputlist.size(); i++) { 
+            if (!fs::is_regular_file(inputlist[i]))  {
+                cout << "sdhash: ERROR file " << inputlist[i] << " not readable or not found." << endl;
+                continue;
+            }
+            int result=read_bloom_vectors(setL,inputlist[i],true);
+            if (result!=0)  {
+                cerr << "sdhash: ERROR: Could not load file of SDBFs, "<< inputlist[i] << " is empty or invalid."<< endl;
+                continue;
+            }
+        }
+        return 0; 
     }
     std::vector<string> small;
     std::vector<string> large;
@@ -441,12 +570,12 @@ int main( int argc, char **argv) {
                 strncpy(smalllist[i],small[i].c_str(),small[i].length()+1);
             }
             if (sdbf_sys.dd_block_size < 1 )  {
-                if (vm.count("gen-compare") || vm.count("output")||vm.count("index-search")) // if we need to save this set for comparison
+                if (vm.count("gen-compare") || vm.count("output")||vm.count("index-search")||vm.count("large")) // if we need to save this set for comparison
                     sdbf_hash_files( smalllist, smallct, sdbf_sys.thread_cnt,set1, info);
                 else 
                     sdbf_hash_files( smalllist, smallct, sdbf_sys.thread_cnt,NULL, info);
             } else {
-                if (vm.count("gen-compare") || vm.count("output")||vm.count("index-search"))
+                if (vm.count("gen-compare") || vm.count("output")||vm.count("index-search")||vm.count("large"))
                     sdbf_hash_files_dd( smalllist, smallct, sdbf_sys.dd_block_size*KB,sdbf_sys.segment_size, set1, info);
                 else 
                     sdbf_hash_files_dd( smalllist, smallct, sdbf_sys.dd_block_size*KB,sdbf_sys.segment_size, NULL, info);
@@ -462,7 +591,7 @@ int main( int argc, char **argv) {
                 strncpy(largelist[i],large[i].c_str(),large[i].length()+1);
             }
             if (sdbf_sys.dd_block_size == 0 ) {
-                if (vm.count("gen-compare")||vm.count("output")) // if we need to save this set for comparison
+                if (vm.count("gen-compare")||vm.count("output")||vm.count("large")) // if we need to save this set for comparison
                     sdbf_hash_files( largelist, largect, sdbf_sys.thread_cnt,set1, info);
                 else
                     sdbf_hash_files( largelist, largect, sdbf_sys.thread_cnt,NULL, info);
@@ -470,12 +599,12 @@ int main( int argc, char **argv) {
                 if (sdbf_sys.dd_block_size == -1) { 
                     if (sdbf_sys.warnings || sdbf_sys.verbose) 
                        cerr << "sdhash: Warning: files over 16MB are being hashed in block mode. Use -b 0 to disable." << endl;
-                    if (vm.count("gen-compare")|| vm.count("output") ||vm.count("index-search")) // if we need to save this set for comparison
+                    if (vm.count("gen-compare")|| vm.count("output") ||vm.count("index-search")||vm.count("large")) // if we need to save this set for comparison
                         sdbf_hash_files_dd( largelist, largect, 16*KB,sdbf_sys.segment_size, set1, info);
                     else
                         sdbf_hash_files_dd( largelist, largect, 16*KB,sdbf_sys.segment_size, NULL, info);
                 } else {
-                    if (vm.count("gen-compare")||vm.count("output") ||vm.count("index-search")) // if we need to save this set for comparison
+                    if (vm.count("gen-compare")||vm.count("output") ||vm.count("index-search")||vm.count("large")) // if we need to save this set for comparison
                         sdbf_hash_files_dd( largelist, largect, sdbf_sys.dd_block_size*KB,sdbf_sys.segment_size, set1, info);
                     else 
                         sdbf_hash_files_dd( largelist, largect, sdbf_sys.dd_block_size*KB,sdbf_sys.segment_size, NULL, info);
@@ -497,23 +626,31 @@ int main( int argc, char **argv) {
             else if (separator.compare("tabs")==0) 
                set1->set_separator('\t');
         }
+        if(vm.count("large")) {
+            // compare all? 
+        }
         if(vm.count("output")) {
-            string gen_results=set1->compare_all_quiet(sdbf_sys.output_threshold,sdbf_sys.thread_cnt);
+            string gen_results=set1->compare_all_quiet(sdbf_sys.output_threshold,sdbf_sys.thread_cnt,fast);
             results_to_file(gen_results,output_name+".compare");
         } else {
-            set1->compare_all(sdbf_sys.output_threshold);
+            set1->compare_all(sdbf_sys.output_threshold,fast);
         }
     } else {
         if (vm.count("output")) {
             // search-index is not hashing to files.  
             if (vm.count("index-search")) {
                 results_to_file(set1->index_results(),output_name+".idx-result");
+            } else if (vm.count("large")) {
+                int success=serialize_to_file(set1,output_name+".sdbflg");
+                if (success) cerr << "SDHASH: error creating large sdbf" << endl;
             } else { 
                 results_to_file(set1->to_string(),output_name+".sdbf");
             }
         } else {
             if (vm.count("index-search")) {
                 cerr << set1->index_results();
+            } else if (vm.count("large")) {
+                cerr << "Large filters require --output filename"<< endl;
             }
         }
     }
