@@ -30,8 +30,10 @@ differ based on the circumstances.
 
 Current version info: 
 <pre>
-sdhash 3.4 by Vassil Roussev, Candice Quates [sdhash.org] 10/2013
+sdhash 4.0 by Vassil Roussev, Candice Quates [sdhash.org] 12/2013
+
 Usage: sdhash <options> <files>
+Configuration:
   -r [ --deep ]                   generate SDBFs from directories and files
   -f [ --target-list ]            generate SDBFs from list(s) of filenames
   -c [ --compare ]                compare SDBFs in file, or two SDBF files
@@ -44,13 +46,17 @@ Usage: sdhash <options> <files>
   -o [ --output ] arg             send output to files
   --separator arg (=pipe)         for comparison results: pipe csv tab
   --hash-name arg                 set name of hash on stdin
+  --fast                          shrink sdbf filters for speedup
+  --large                         create larger (1M content) filters
   --validate                      parse SDBF file to check if it is valid
+  --details                       parse SDBF-LG file for contents
   --index                         generate indexes while hashing
   --index-search arg              search directory of reference indexes
   --config-file arg (=sdhash.cfg) use config file
   --verbose                       warnings, debug and progress output
   --version                       show version info
   -h [ --help ]                   produce help message
+
 </pre>
 Tutorial: http://roussev.net/sdhash/tutorial/sdhash-tutorial.html
 
