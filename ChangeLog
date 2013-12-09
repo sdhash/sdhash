@@ -1,3 +1,14 @@
+New in version 4.0
+
+Changed method for determining comparison cutoff based on new experiments
+
+Added a new "--fast" mode for sdbfs to use a smaller-sized filter in real time
+
+Added larger, finer grained filters "--large" which uses google protobuf for storage
+
+Added testing programs for our bloom filters which accept streams of sha1
+
+--------
 New in version 3.4
 
 New constructor for sdbf class to accept strings. 

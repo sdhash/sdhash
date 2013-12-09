@@ -48,6 +48,7 @@ pthreads development library
 openmp library -- generally installed
 g++ - will work all the way down to 4.2 -- but try to use later versions
 g++ - which includes -sse4.2 compatibilty.  
+google protocol buffers includes and library - I was using 2.5 here
 
 ETC 
 
