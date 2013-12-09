@@ -226,7 +226,7 @@ class sdhashsrvHandler : virtual public sdhashsrvIf {
     if (setcollection.count(num1)) {
         add_request(resultID,(string)get_set_name(num1)+" all hashes");
         std::cout << "compareAll begin request for " << num1 << " " << get_set_name(num1) <<  std::endl;
-        result_str=get_set(num1)->compare_all_quiet(threshold,processing_thread_count);
+        result_str=get_set(num1)->compare_all_quiet(threshold,processing_thread_count,false);
         add_result(resultID,result_str);
     } else {
         std::cout << "compareAll begin request for " << num1 << " not found" << std::endl;
@@ -249,7 +249,7 @@ class sdhashsrvHandler : virtual public sdhashsrvIf {
             +(string)get_set_name(num2));
         std::cout << "compareTwo begin request for " << num1 << " " << get_set_name(num1) ;
         std::cout << " "<< num2 << " " << get_set_name(num2) <<  std::endl;
-        result_str=get_set(num1)->compare_to_quiet(get_set(num2),threshold,sample,processing_thread_count);
+        result_str=get_set(num1)->compare_to_quiet(get_set(num2),threshold,sample,processing_thread_count,false);
         add_result(resultID,result_str);
     } else {
         std::cout << "compareTwo begin request for " << num1 ;
