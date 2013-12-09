@@ -1,5 +1,5 @@
 // bloom_filter class implementation
-// author: candice quates
+//
 
 #include "bloom_filter.h"
 
@@ -7,7 +7,9 @@
 #include <fstream>
 #include <sstream>
 #include <boost/lexical_cast.hpp>
+#ifndef _M_IX86
 #include <smmintrin.h> 
+#endif
 
 #include <boost/math/special_functions/round.hpp>
 
@@ -24,6 +26,21 @@ bloom_filter::BIT_MASKS_32[] = {
     0x01FFFF, 0x03FFFF, 0x07FFFF, 0x0FFFFF, 0x1FFFFF, 0x3FFFFF, 0x7FFFFF, 0xFFFFFF,
     0x01FFFFFF, 0x03FFFFFF, 0x07FFFFFF, 0x0FFFFFFF, 0x1FFFFFFF, 0x3FFFFFFF, 0x7FFFFFFF, 0xFFFFFFFF
 };    
+
+/// cutoffs for LARGE filters 16kb
+const
+uint32_t bloom_filter::CUTOFFS[]={
+    86511,86511,86511,86511 , 67010 , 52623 , 42139 , 34377 , 28532 , 24026 , 20499 , 17687 , 15407 , 13535 , 11982 , 
+    10685 , 9589 , 8652 , 7846 , 7149 , 6541 , 6008 , 5537 , 5121 , 4745 , 4413 , 4115 , 3850 , 
+    3606 , 3388 , 3185 , 3001 , 2834 , 2681 , 2538 , 2407 , 2287 , 2176 , 2072 , 1977 , 1888 , 1802 , 
+    1724 , 1651 , 1583 , 1519 , 1458 , 1402 , 1348 , 1298 , 1248 , 1204 , 1161 , 1120 , 1083 , 1047 , 
+    1013 , 981 , 949 , 921 , 892 , 866 , 839 , 815 , 791 , 768 , 747 , 726 , 706 , 688 , 669 , 652 , 
+    635 , 619 , 603 , 589 , 575 , 561 , 546 , 533 , 521 , 510 , 498 , 487 , 476 , 467 , 456 , 447 , 
+    438 , 429 , 420 , 411 , 403 , 395 , 387 , 380 , 373 , 365 , 358 , 351 , 345 , 338 , 332 , 326 , 
+    320 , 314 , 309 , 303 , 298 , 293 , 288 , 284 , 279 , 275 , 271 , 266 , 262 , 258 , 254 , 250 , 
+    246 , 242 , 238 , 235 , 231 , 228 , 225 , 221 , 218
+};
+
 
 /**
    Create new empty bloom filter
@@ -348,23 +365,32 @@ bloom_filter::compare(bloom_filter *other, double scale) {
     uint64_t *bf_64 = (uint64_t *)bf;
     uint64_t *bf2_64 = (uint64_t *)other->bf;
     int64_t res=0;
-#ifndef _M_IX86 // allowing win32 shortcut
+#ifndef _M_IX86
     for (uint32_t i=0 ; i < bf_size / 8 ; i++) {
         res+=_mm_popcnt_u64(bf_64[i] & bf2_64[i]);
     }
 #endif
     int max_est = (this->hamminglg < other->hamminglg) ? this->hamminglg : other->hamminglg;
     double m = bf_size*8;
-    double k = 5;
-    double exp = 1-1.0/m;
+    //double k = 5;
+    //double exp = 1-1.0/m;
     int x=this->bf_elem_count;
     int y=other->bf_elem_count;
-    int min_est = boost::math::round((double)m*(1 - pow(exp,(double)k*x) - pow(exp,(double)k*y) + pow(exp,(double)k*(x+y))) );
-    int cut_off=boost::math::round((scale*(double)(max_est-min_est))+(double)min_est);
+    //int min_est = boost::math::round((double)m*(1 - pow(exp,(double)k*x) - pow(exp,(double)k*y) + pow(exp,(double)k*(x+y))) );
+    if (( x < 32) ||( y < 32))  // filtering out too-small filters
+        return 0;
+    int mn=boost::math::round((2*m)/(x+y));
+    int cut_off=CUTOFFS[mn];
+//cout << "x " << x << " y " << y << endl;
 //cout << "scale*max_est-min_est " << scale*(double)(max_est-min_est) << " min_est " << min_est << endl;
 //max_est = boost::math::round((double)max_est / (double)(bf_size/256));
-    int32_t result=(res > cut_off) ? boost::math::round<int32_t>(100.0*(double)(res-cut_off)/(double)(max_est-cut_off)) : 0;
-cout << " " << (int)(m/bf_elem_count) << " " <<min_est << " " << res << " " << max_est <<" " << cut_off << " "; // << endl;
+if (mn > 128)
+    cut_off=CUTOFFS[128]-(mn-128); // setting the cutoff to cutoff -n
+if (cut_off < 0){
+    return 0;
+}
+    int32_t result=(res > cut_off) ? boost::math::round<int32_t>(100.0*((double)(res-cut_off)/(double)(max_est-cut_off))) : 0;
+//cout << mn << " " << res << " " << cut_off << " " << max_est<< " " << result << endl;
     //int32_t result=res; // TEMP DEBUGGING
     return result;
 
@@ -428,7 +454,7 @@ bloom_filter::compute_hamming() {
     hamming=0;
     hamminglg=0;
     uint64_t *b64 = (uint64_t *)this->bf;
-#ifndef _M_IX86 // allowing win32 shortcut
+#ifndef _M_IX86
     for( uint32_t j=0; j<bf_size/8; j++) {
         hamminglg += _mm_popcnt_u64(b64[j]);
     }

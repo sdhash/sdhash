@@ -43,6 +43,8 @@ public:
     static uint32_t BIT_MASKS[];
     static uint8_t BITS[];
     static uint32_t BF_CLASS_MASKS[];
+    static uint32_t CUTOFFS256[];
+    static uint32_t CUTOFFS64[];
     uint64_t ENTROPY_64_INT[65];
 
 public: 

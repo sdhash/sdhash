@@ -327,6 +327,9 @@ sdbf::to_string () const { // write self to stream
         }
     }
     hash << endl;
+    //this->big_filter->set_name((string)this->hashname);
+    //hash << this->big_filter->to_string()  ;
+    //hash << endl;
     return hash.str();
 }
 
@@ -371,6 +374,11 @@ sdbf::sdbf_create(const char *name) {
     this->buffer = NULL;
     this->info=NULL;
     this->filenamealloc=false;
+    // testing: empty "big filter" for creation  -- start with 1
+    this->big_filters=new vector<bloom_filter*>();
+    bloom_filter *tmp=new bloom_filter(BIGFILTER,5,BIGFILTER_ELEM,0.01); // trying for m/n = 8
+    this->big_filters->push_back(tmp);
+    this->fastmode=false;
 }
 
 
@@ -411,3 +419,21 @@ sdbf::filter_count() {
     return bf_count;
 }
 
+/**  
+    Temporary destructive fast filter comparison.
+*/
+void
+sdbf::fast() {
+    // for each filter
+    for (uint32_t i=0; i < bf_count; i++) {
+        uint8_t *data=this->clone_filter(i);
+        bloom_filter *tmp=new bloom_filter(data,256,i,get_elem_count(this,i),0);
+        tmp->fold(2);
+        tmp->compute_hamming();
+        this->hamming[i]=tmp->hamminglg;
+        memcpy(this->buffer + i*this->bf_size,tmp->bf,tmp->bf_size);
+        free(tmp);
+        free(data);
+    }
+    this->fastmode=true;
+}

@@ -78,6 +78,7 @@ private:
 public:
     static const uint32_t BIT_MASKS_32[];
     static const uint32_t BITS[];
+    static const uint32_t CUTOFFS[];
 
     uint8_t  *bf;            // Beginning of the BF 
     uint16_t  hamming;        // weight of this bf

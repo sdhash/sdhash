@@ -7,6 +7,7 @@
 #include "bloom_filter.h"
 #include "util.h"
 #include "sdbf_set.h"
+#include "blooms.pb.h"  // for --multi output
 
 #include <boost/filesystem.hpp>
 
@@ -236,9 +237,15 @@ sdbf_set::set_separator(char sep) {
     \param threshold output threshold, defaults to 1
 */
 void
-sdbf_set::compare_all(int32_t threshold) { 
+sdbf_set::compare_all(int32_t threshold,bool fast) { 
     cout.fill('0');
     int end = this->items.size();
+    if (fast) {
+        #pragma omp parallel for
+        for (int i = 0; i < end ; i++) {
+           this->items.at(i)->fast();
+        }
+    }
     #pragma omp parallel for
     for (int i = 0; i < end ; i++) {
         for (int j = i; j < end ; j++) {
@@ -268,12 +275,18 @@ sdbf_set::compare_all(int32_t threshold) {
     \returns std::string result listing
 */
 std::string 
-sdbf_set::compare_all_quiet(int32_t threshold, int32_t thread_count) { 
+sdbf_set::compare_all_quiet(int32_t threshold, int32_t thread_count,bool fast) { 
     std::stringstream out;
     out.fill('0');
     int end = this->items.size();
     if (thread_count > 0) 
         omp_set_num_threads(thread_count);
+    if (fast) {
+        #pragma omp parallel for
+        for (int i = 0; i < end ; i++) {
+           this->items.at(i)->fast();
+        }
+    }
     #pragma omp parallel for
     for (int i = 0; i < end ; i++) {
         for (int j = i; j < end ; j++) {
@@ -302,10 +315,20 @@ sdbf_set::compare_all_quiet(int32_t threshold, int32_t thread_count) {
     \param sample_size size of bloom filter sample. send 0 for no sampling
 */
 void
-sdbf_set::compare_to(sdbf_set *other,int32_t threshold,uint32_t sample_size) {
+sdbf_set::compare_to(sdbf_set *other,int32_t threshold,uint32_t sample_size, bool fast) {
     cout.fill('0');
     int tend = other->size();
     int qend = this->size();
+    if (fast) {
+        #pragma omp parallel for
+        for (int i = 0; i < tend ; i++) {
+            this->items.at(i)->fast();
+        }
+        #pragma omp parallel for
+        for (int i = 0; i < qend ; i++) {
+            this->items.at(i)->fast();
+        }
+    }
     #pragma omp parallel for
     for (int i = 0; i < qend ; i++) {
         for (int j = 0; j < tend ; j++) {
@@ -334,13 +357,23 @@ sdbf_set::compare_to(sdbf_set *other,int32_t threshold,uint32_t sample_size) {
     \returns std::string result listing
 */
 std::string
-sdbf_set::compare_to_quiet(sdbf_set *other,int32_t threshold,uint32_t sample_size, int32_t thread_count) {
+sdbf_set::compare_to_quiet(sdbf_set *other,int32_t threshold,uint32_t sample_size, int32_t thread_count,bool fast) {
     std::stringstream out;
     out.fill('0');
     int tend = other->size();
     int qend = this->size();
     if (thread_count > 0) 
         omp_set_num_threads(thread_count);
+    if (fast) {
+        #pragma omp parallel for
+        for (int i = 0; i < tend ; i++) {
+            this->items.at(i)->fast();
+        }
+        #pragma omp parallel for
+        for (int i = 0; i < qend ; i++) {
+            this->items.at(i)->fast();
+        }
+    }
     #pragma omp parallel for
     for (int i = 0; i < qend ; i++) {
         for (int j = 0; j < tend ; j++) {

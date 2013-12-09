@@ -1,6 +1,6 @@
 /**
  * bf_utils.c: Bloom filter utilities
- * author: Vassil Roussev, Candice Quates (popc)
+ * author: Vassil Roussev
  */
 
 #include <math.h>
@@ -71,12 +71,48 @@ uint32_t bf_bitcount( uint8_t *bfilter_1, uint8_t *bfilter_2, uint32_t bf_size) 
    
 }
 
+
+/** 
+   Test code for fast (small) filters
+*/
+uint32_t
+bf_bitcount_cut_64_asm( uint8_t *bfilter_1, uint8_t *bfilter_2, uint32_t cut_off, int32_t slack) {
+    uint32_t result=0;
+    uint64_t buff64[32];
+    uint64_t *f1_64 = (uint64_t *)bfilter_1;
+    uint64_t *f2_64 = (uint64_t *)bfilter_2;
+    // Partial computation (1/8 of full computation):
+    buff64[0]= f1_64[0] & f2_64[0];
+    buff64[1]= f1_64[1] & f2_64[1];
+    buff64[2]= f1_64[2] & f2_64[2];
+    buff64[3]= f1_64[3] & f2_64[3];
+#ifndef _M_IX86 // allowing win32 shortcut
+    result += _mm_popcnt_u64(buff64[0]);
+    result += _mm_popcnt_u64(buff64[1]);
+    result += _mm_popcnt_u64(buff64[2]);
+    result += _mm_popcnt_u64(buff64[3]);
+    // First shortcircuit for the computation
+    if( cut_off > 0 && (2*result + slack) < cut_off) {
+        return 0;
+    }
+    buff64[4]= f1_64[4] & f2_64[4];
+    buff64[5]= f1_64[5] & f2_64[5];
+    buff64[6]= f1_64[6] & f2_64[6];
+    buff64[7]= f1_64[7] & f2_64[7];
+    result += _mm_popcnt_u64(buff64[4]);
+    result += _mm_popcnt_u64(buff64[5]);
+    result += _mm_popcnt_u64(buff64[6]);
+    result += _mm_popcnt_u64(buff64[7]);
+// end of short filters
+#endif
+    return result;
+
+}
 /** 
    Test code for compiler intrinsic 64-bit popcnt
 */
 uint32_t
 bf_bitcount_cut_256_asm( uint8_t *bfilter_1, uint8_t *bfilter_2, uint32_t cut_off, int32_t slack) {
-//bf_bitcount_asm( uint8_t *bfilter_1, uint8_t *bfilter_2) {
     uint32_t result=0;
     uint64_t buff64[32];
     uint64_t *f1_64 = (uint64_t *)bfilter_1;

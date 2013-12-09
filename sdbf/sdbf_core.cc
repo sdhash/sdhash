@@ -97,6 +97,7 @@ sdbf::gen_chunk_hash( uint8_t *file_buffer, const uint64_t chunk_pos, const uint
     uint32_t bf_count = this->bf_count;
     uint32_t last_count = this->last_count;
     uint8_t *curr_bf = this->buffer + (bf_count-1)*(this->bf_size);
+    uint32_t bigfi_count = 0;
     if (chunk_size > config->pop_win_size) {
         for( i=0; i<chunk_size-config->pop_win_size; i++) {
             if( chunk_scores[i] > config->threshold) {
@@ -112,12 +113,21 @@ sdbf::gen_chunk_hash( uint8_t *file_buffer, const uint64_t chunk_pos, const uint
                         if (ins==false)
                             continue;
                     }
+// new style big filters...
+bool inserted=this->big_filters->back()->insert_sha1((uint32_t*)sha1_hash);
+if (inserted==false) 
+    continue;
                 last_count++;
+                bigfi_count++;
                 if( last_count == this->max_elem) {
                     curr_bf += this->bf_size;  
                     bf_count++;
                     last_count = 0;
                 } 
+                if (bigfi_count == this->big_filters->back()->max_elem) {
+                    this->big_filters->push_back(new bloom_filter(BIGFILTER,5,BIGFILTER_ELEM,0.01));
+                    bigfi_count=0;
+                }
             }
         }
     }
@@ -372,6 +382,8 @@ sdbf::sdbf_score( sdbf *sdbf_1, sdbf *sdbf_2, uint32_t sample) {
     if (bf_count_1 > 1) 
         denom-=sparsect;
     free(tasklist);
+    if (denom == 0)
+        score_sum = -1;
     return (score_sum < 0) ? -1 : boost::math::round( 100.0*score_sum/(denom));
     
 }
@@ -385,7 +397,7 @@ sdbf::sdbf_max_score( sdbf_task_t *task) {
     assert( task != NULL);
         
     double score, max_score=-1;
-    uint32_t i, s1, s2, min_est, max_est, match, cut_off, slack=48;
+    uint32_t i, s1, s2, max_est, match, cut_off, slack=48;
     uint32_t bf_size = task->ref_sdbf->bf_size;
     uint16_t *bf_1, *bf_2;
 
@@ -398,19 +410,33 @@ sdbf::sdbf_max_score( sdbf_task_t *task) {
     for( i=task->tid; i<comp_cnt; i+=task->tcount) {
         bf_2 = (uint16_t *)(task->tgt_sdbf->buffer + i*bf_size);
         s2 = get_elem_count( task->tgt_sdbf, i);
-        if( task->ref_sdbf->bf_count > 1 && s2 < MIN_ELEM_COUNT)
+        if( task->ref_sdbf->bf_count >= 1 && s2 < MIN_ELEM_COUNT)
             continue;
         uint32_t e2_cnt = task->tgt_sdbf->hamming[i];
 
         // Max/min number of matching bits & zero cut off
         max_est = (e1_cnt < e2_cnt) ? e1_cnt : e2_cnt;
-        min_est = bf_match_est( 8*bf_size, task->ref_sdbf->hash_count, s1, s2, 0);
-        cut_off = boost::math::round( SD_SCORE_SCALE*(double)(max_est-min_est)+(double)min_est);
+        //min_est = bf_match_est( 8*bf_size, task->ref_sdbf->hash_count, s1, s2, 0);
+        //cut_off = boost::math::round( SD_SCORE_SCALE*(double)(max_est-min_est)+(double)min_est);
+        int mn;
+        if (!task->ref_sdbf->fastmode) {
+            mn=boost::math::round(4096/(s1+s2));
+            cut_off=config->CUTOFFS256[mn];
+        } else {
+            mn=boost::math::round(1024/(s1+s2));
+            cut_off=config->CUTOFFS64[mn];
+        }
         // Find matching bits
         if (config->popcnt) {
-            match = bf_bitcount_cut_256_asm( (uint8_t *)bf_1, (uint8_t *)bf_2, cut_off, slack);
+            if (!task->ref_sdbf->fastmode)
+                match = bf_bitcount_cut_256_asm( (uint8_t *)bf_1, (uint8_t *)bf_2, cut_off, slack);
+            else 
+                match = bf_bitcount_cut_64_asm( (uint8_t *)bf_1, (uint8_t *)bf_2, cut_off, slack);
             if( match > 0) {
-                match = bf_bitcount_cut_256_asm( (uint8_t *)bf_1, (uint8_t *)bf_2, 0, 0);
+                if (!task->ref_sdbf->fastmode)
+                    match = bf_bitcount_cut_256_asm( (uint8_t *)bf_1, (uint8_t *)bf_2, 0, 0);
+                else
+                    match = bf_bitcount_cut_64_asm( (uint8_t *)bf_1, (uint8_t *)bf_2, 0, 0);
             }
         } else {
             match = bf_bitcount_cut_256( (uint8_t *)bf_1, (uint8_t *)bf_2, cut_off, slack);

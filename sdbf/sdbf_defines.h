@@ -61,7 +61,8 @@
 #define SD_SCORE_SCALE      0.3
 #define SYNC_SIZE           16384
 
-#define BIGFILTER      32768
+#define BIGFILTER      16384
+#define BIGFILTER_ELEM   8738
 
 // ugly ugly cpuid check.  have to include it for OS X/Linux on same compile
 
@@ -114,6 +115,7 @@ typedef struct {
 uint32_t bf_bitcount( uint8_t *bfilter_1, uint8_t *bfilter_2, uint32_t bf_size);
 uint32_t bf_bitcount_cut_256( uint8_t *bfilter_1, uint8_t *bfilter_2, uint32_t cut_off, int32_t slack);
 uint32_t bf_bitcount_cut_256_asm( uint8_t *bfilter_1, uint8_t *bfilter_2, uint32_t cut_off, int32_t slack);
+uint32_t bf_bitcount_cut_64_asm( uint8_t *bfilter_1, uint8_t *bfilter_2, uint32_t cut_off, int32_t slack);
 uint32_t bf_sha1_insert( uint8_t *bf, uint8_t bf_class, uint32_t *sha1_hash);
 uint32_t bf_match_est( uint32_t m, uint32_t k, uint32_t s1, uint32_t s2, uint32_t common);
 int32_t  get_elem_count(class sdbf *sdbf, uint64_t index);

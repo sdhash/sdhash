@@ -8,6 +8,7 @@
 #include "sdbf_class.h"
 #include "bloom_filter.h"
 #include "util.h"
+#include "blooms.pb.h"
 
 
 /// sdbf_set class
@@ -49,14 +50,14 @@ public:
     uint64_t filter_count();
 
     /// Compares all objects in a set to each other, output to stdout
-    void compare_all(int32_t threshold); 
+    void compare_all(int32_t threshold,bool fast); 
     /// Compares all objects in a set to each other, returned as string
-    std::string compare_all_quiet(int32_t threshold, int32_t thread_count); 
+    std::string compare_all_quiet(int32_t threshold, int32_t thread_count,bool fast); 
 
     ///queries one set for the contents of another
-    void compare_to(sdbf_set *other,int32_t threshold, uint32_t sample_size); 
+    void compare_to(sdbf_set *other,int32_t threshold, uint32_t sample_size,bool fast); 
     /// Compares all objects in a set to another set , returned as string
-    std::string compare_to_quiet(sdbf_set *other,int32_t threshold, uint32_t sample_size, int32_t thread_count); 
+    std::string compare_to_quiet(sdbf_set *other,int32_t threshold, uint32_t sample_size, int32_t thread_count,bool fast); 
 
     /// return a string which contains the output-encoded sdbfs in this set
     std::string to_string() const;

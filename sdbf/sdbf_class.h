@@ -61,6 +61,8 @@ public:
     uint8_t *clone_filter(uint32_t position);
     uint32_t filter_count();
 
+    void fast();
+
 public:
     /// global configuration object
     static class sdbf_conf *config;  
@@ -112,6 +114,9 @@ private:
     uint32_t  dd_block_size; // Size of the base block in dd mode
     uint64_t orig_file_size; // size of the original file
     bool     filenamealloc;
+    bool     fastmode;
+public:
+    std::vector<class bloom_filter *> *big_filters;
 
 };
 
