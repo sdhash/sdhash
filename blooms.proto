@@ -1,0 +1,17 @@
+package blooms;
+
+message BloomFilter {
+    optional uint64 bf_size = 1;
+    optional uint64 max_elem = 2;
+    optional uint64 elem_count = 3;
+    optional uint32 id = 4;
+    optional string name = 5;
+    repeated fixed64 filter = 6;
+}
+
+message BloomVector {
+    optional int32 filter_count = 1;
+    optional string name = 2;
+    optional int32 id = 3;
+    optional uint64 filesize = 4;
+}
