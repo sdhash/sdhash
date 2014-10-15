@@ -651,6 +651,8 @@ int main( int argc, char **argv) {
                 cerr << set1->index_results();
             } else if (vm.count("large")) {
                 cerr << "Large filters require --output filename"<< endl;
+            } else {
+                cout << set1;
             }
         }
     }
