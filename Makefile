@@ -8,17 +8,17 @@ MANDIR=$(PREFIX)/share/man/man1
 
 SDBF_SRC = sdbf/sdbf_class.cc sdbf/sdbf_core.cc sdbf/map_file.cc sdbf/entr64.cc sdbf/base64.cc sdbf/bf_utils.cc sdbf/error.cc sdbf/sdbf_conf.cc sdbf/sdbf_set.cc base64/modp_b64.cc sdbf/bloom_filter.cc lz4/lz4.cc sdbf/bloom_vector.cc sdbf/blooms.pb.cc
 
-SDHASH_SRC = sdhash-src/sdhash.cc sdhash-src/sdhash_threads.cc 
+SDHASH_SRC = sdhash-src/sdhash.cc sdhash-src/sdhash_threads.cc
 
-BLOOM_TEST = test/bloom-test.cc test/modp_b16.cc 
+BLOOM_TEST = test/bloom-test.cc test/modp_b16.cc
 
 
 CC = g++
 LD = $(CC)
 
-# BAD, BAD OPTIMIZATION! -fstrict-aliasing 
+# BAD, BAD OPTIMIZATION! -fstrict-aliasing
 ifneq ($(MAKECMDGOALS),debug)
-CFLAGS = -fPIC -fopenmp -msse4.2 -O3 -fno-strict-aliasing -D_FILE_OFFSET_BITS=64 -D_LARGE_FILE_API -D_BSD_SOURCE -I./external 
+CFLAGS = -fPIC -fopenmp -msse4.2 -O3 -fno-strict-aliasing -D_FILE_OFFSET_BITS=64 -D_LARGE_FILE_API -D_BSD_SOURCE -I./external
 else
 CFLAGS = -fPIC -fopenmp -msse4.2 -O0 -g -D_FILE_OFFSET_BITS=64 -D_LARGE_FILE_API -D_BSD_SOURCE -I./external -Wall
 endif
@@ -32,13 +32,13 @@ BLOOM_TEST_OBJ = $(BLOOM_TEST:.cc=.o)
 
 LIBSDBF=libsdbf.a
 
-all: boost stream 
+all: boost stream
 
-debug: boost stream 
+debug: boost stream
 
 cygwin: boost stream
 
-install: boost man 
+install: boost man
 	mkdir -p $(INSTDIR)
 	mkdir -p $(MANDIR)
 #cp sdhash sdhash-srv sdhash-cli $(INSTDIR)
@@ -54,8 +54,8 @@ install-server: install server
 
 man: man/sdhash.1 man/sdhash-cli.1 man/sdhash-srv.1
 
-docs: 
-	doxygen 
+docs:
+	doxygen
 
 man/sdhash.1:
 	pod2man -c "" -r "" man/sdhash.pod > man/sdhash.1
@@ -66,28 +66,28 @@ man/sdhash-srv.1:
 man/sdhash-cli.1:
 	pod2man -c "" -r "" man/sdhash-cli.pod > man/sdhash-cli.1
 
-swig-py: boost swig/python/sdbf_wrap.o swig/python/_sdbf_class.so 
-swig-win-py: boost swig/python/sdbf_wrap.o swig/python/_sdbf_class.dll 
+swig-py: boost swig/python/sdbf_wrap.o swig/python/_sdbf_class.so
+swig-win-py: boost swig/python/sdbf_wrap.o swig/python/_sdbf_class.dll
 
 swig/python/sdbf_wrap.o: sdbf.i $(LIBSDBF)
 	swig -c++ -python swig/python/sdbf.i
 	g++ -std=c++0x -fPIC -c swig/python/sdbf_wrap.cxx -o swig/python/sdbf_wrap.o -I/usr/include/python2.7
 
 swig/python/_sdbf_class.so: swig/python/sdbf_wrap.o $(LIBSDBF)
-	g++ -shared swig/python/sdbf_wrap.o -fopenmp -L./external/stage/lib -Wl,--whole-archive -lboost_system -lboost_filesystem -lboost_thread -Wl,--no-whole-archive -lpython2.7 libsdbf.a -o swig/python/_sdbf_class.so -lcrypto -lpthread 
+	g++ -shared swig/python/sdbf_wrap.o -fopenmp -L./external/stage/lib -Wl,--whole-archive -lboost_system -lboost_filesystem -lboost_thread -Wl,--no-whole-archive -lpython2.7 libsdbf.a -o swig/python/_sdbf_class.so -lcrypto -lpthread
 
 sdbf.i:
 
-$(LIBSDBF): $(SDBF_OBJ) 
+$(LIBSDBF): $(SDBF_OBJ)
 	ar r $(LIBSDBF) $(SDBF_OBJ)
 
 stream: $(SDHASH_OBJ) $(LIBSDBF)
-	$(LD) $(SDHASH_OBJ) $(SDHASH_CLIENT_OBJ) $(LIBSDBF) -o sdhash $(LDFLAGS) 
+	$(LD) $(SDHASH_OBJ) $(SDHASH_CLIENT_OBJ) $(LIBSDBF) -o sdhash $(LDFLAGS)
 
 bloom-test: $(BLOOM_TEST_OBJ) $(LIBSDBF)
-	$(LD) $(BLOOM_TEST_OBJ) $(LIBSDBF) -o bloom-test $(LDFLAGS) 
+	$(LD) $(BLOOM_TEST_OBJ) $(LIBSDBF) -o bloom-test $(LDFLAGS)
 
-boost: 
+boost:
 	cd external ; ./bootstrap.sh --with-python=python2 ; ./b2 link=static cxxflags='-fPIC -std=c++0x' ; cd -
 
 server:
@@ -102,7 +102,10 @@ gpu:
 
 #pcap: sdhash-pcap.c
 #	gcc -I/usr/include/pcap -o sdhash-pcap sdhash-pcap.c -lpcap
-	
+
+protobuf:
+	protoc -I ./ --cpp_out=sdbf/ blooms.proto
+
 clean:
 	-@rm *.o sdhash sdhash-cli sdhash-srv 2> /dev/null || true
 	-@rm sdhash-src/*.o sdbf/*.o 2> /dev/null || true

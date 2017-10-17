@@ -7,6 +7,7 @@
 #include <algorithm>
 
 #include <google/protobuf/stubs/common.h>
+#include <google/protobuf/stubs/port.h>
 #include <google/protobuf/stubs/once.h>
 #include <google/protobuf/io/coded_stream.h>
 #include <google/protobuf/wire_format_lite_inl.h>
@@ -17,155 +18,192 @@
 // @@protoc_insertion_point(includes)
 
 namespace blooms {
+class BloomFilterDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<BloomFilter> {
+} _BloomFilter_default_instance_;
+class BloomVectorDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<BloomVector> {
+} _BloomVector_default_instance_;
+
+namespace protobuf_blooms_2eproto {
+
 
 namespace {
 
-const ::google::protobuf::Descriptor* BloomFilter_descriptor_ = NULL;
-const ::google::protobuf::internal::GeneratedMessageReflection*
-  BloomFilter_reflection_ = NULL;
-const ::google::protobuf::Descriptor* BloomVector_descriptor_ = NULL;
-const ::google::protobuf::internal::GeneratedMessageReflection*
-  BloomVector_reflection_ = NULL;
+::google::protobuf::Metadata file_level_metadata[2];
 
 }  // namespace
 
+PROTOBUF_CONSTEXPR_VAR ::google::protobuf::internal::ParseTableField
+    const TableStruct::entries[] = {
+  {0, 0, 0, ::google::protobuf::internal::kInvalidMask, 0, 0},
+};
 
-void protobuf_AssignDesc_blooms_2eproto() {
-  protobuf_AddDesc_blooms_2eproto();
-  const ::google::protobuf::FileDescriptor* file =
-    ::google::protobuf::DescriptorPool::generated_pool()->FindFileByName(
-      "blooms.proto");
-  GOOGLE_CHECK(file != NULL);
-  BloomFilter_descriptor_ = file->message_type(0);
-  static const int BloomFilter_offsets_[6] = {
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BloomFilter, bf_size_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BloomFilter, max_elem_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BloomFilter, elem_count_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BloomFilter, id_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BloomFilter, name_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BloomFilter, filter_),
-  };
-  BloomFilter_reflection_ =
-    new ::google::protobuf::internal::GeneratedMessageReflection(
-      BloomFilter_descriptor_,
-      BloomFilter::default_instance_,
-      BloomFilter_offsets_,
-      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BloomFilter, _has_bits_[0]),
-      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BloomFilter, _unknown_fields_),
-      -1,
-      ::google::protobuf::DescriptorPool::generated_pool(),
-      ::google::protobuf::MessageFactory::generated_factory(),
-      sizeof(BloomFilter));
-  BloomVector_descriptor_ = file->message_type(1);
-  static const int BloomVector_offsets_[4] = {
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BloomVector, filter_count_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BloomVector, name_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BloomVector, id_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BloomVector, filesize_),
-  };
-  BloomVector_reflection_ =
-    new ::google::protobuf::internal::GeneratedMessageReflection(
-      BloomVector_descriptor_,
-      BloomVector::default_instance_,
-      BloomVector_offsets_,
-      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BloomVector, _has_bits_[0]),
-      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BloomVector, _unknown_fields_),
-      -1,
-      ::google::protobuf::DescriptorPool::generated_pool(),
-      ::google::protobuf::MessageFactory::generated_factory(),
-      sizeof(BloomVector));
-}
+PROTOBUF_CONSTEXPR_VAR ::google::protobuf::internal::AuxillaryParseTableField
+    const TableStruct::aux[] = {
+  ::google::protobuf::internal::AuxillaryParseTableField(),
+};
+PROTOBUF_CONSTEXPR_VAR ::google::protobuf::internal::ParseTable const
+    TableStruct::schema[] = {
+  { NULL, NULL, 0, -1, -1, false },
+  { NULL, NULL, 0, -1, -1, false },
+};
+
+const ::google::protobuf::uint32 TableStruct::offsets[] = {
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BloomFilter, _has_bits_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BloomFilter, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BloomFilter, bf_size_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BloomFilter, max_elem_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BloomFilter, elem_count_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BloomFilter, id_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BloomFilter, name_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BloomFilter, filter_),
+  1,
+  2,
+  3,
+  4,
+  0,
+  ~0u,
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BloomVector, _has_bits_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BloomVector, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BloomVector, filter_count_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BloomVector, name_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BloomVector, id_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BloomVector, filesize_),
+  1,
+  0,
+  2,
+  3,
+};
+
+static const ::google::protobuf::internal::MigrationSchema schemas[] = {
+  { 0, 11, sizeof(BloomFilter)},
+  { 17, 26, sizeof(BloomVector)},
+};
+
+static ::google::protobuf::Message const * const file_default_instances[] = {
+  reinterpret_cast<const ::google::protobuf::Message*>(&_BloomFilter_default_instance_),
+  reinterpret_cast<const ::google::protobuf::Message*>(&_BloomVector_default_instance_),
+};
 
 namespace {
 
-GOOGLE_PROTOBUF_DECLARE_ONCE(protobuf_AssignDescriptors_once_);
-inline void protobuf_AssignDescriptorsOnce() {
-  ::google::protobuf::GoogleOnceInit(&protobuf_AssignDescriptors_once_,
-                 &protobuf_AssignDesc_blooms_2eproto);
+void protobuf_AssignDescriptors() {
+  AddDescriptors();
+  ::google::protobuf::MessageFactory* factory = NULL;
+  AssignDescriptors(
+      "blooms.proto", schemas, file_default_instances, TableStruct::offsets, factory,
+      file_level_metadata, NULL, NULL);
 }
 
+void protobuf_AssignDescriptorsOnce() {
+  static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
+  ::google::protobuf::GoogleOnceInit(&once, &protobuf_AssignDescriptors);
+}
+
+void protobuf_RegisterTypes(const ::std::string&) GOOGLE_ATTRIBUTE_COLD;
 void protobuf_RegisterTypes(const ::std::string&) {
   protobuf_AssignDescriptorsOnce();
-  ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
-    BloomFilter_descriptor_, &BloomFilter::default_instance());
-  ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
-    BloomVector_descriptor_, &BloomVector::default_instance());
+  ::google::protobuf::internal::RegisterAllTypes(file_level_metadata, 2);
 }
 
 }  // namespace
 
-void protobuf_ShutdownFile_blooms_2eproto() {
-  delete BloomFilter::default_instance_;
-  delete BloomFilter_reflection_;
-  delete BloomVector::default_instance_;
-  delete BloomVector_reflection_;
+void TableStruct::Shutdown() {
+  _BloomFilter_default_instance_.Shutdown();
+  delete file_level_metadata[0].reflection;
+  _BloomVector_default_instance_.Shutdown();
+  delete file_level_metadata[1].reflection;
 }
 
-void protobuf_AddDesc_blooms_2eproto() {
-  static bool already_here = false;
-  if (already_here) return;
-  already_here = true;
+void TableStruct::InitDefaultsImpl() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
-  ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-    "\n\014blooms.proto\022\006blooms\"n\n\013BloomFilter\022\017\n"
-    "\007bf_size\030\001 \001(\004\022\020\n\010max_elem\030\002 \001(\004\022\022\n\nelem"
-    "_count\030\003 \001(\004\022\n\n\002id\030\004 \001(\r\022\014\n\004name\030\005 \001(\t\022\016"
-    "\n\006filter\030\006 \003(\006\"O\n\013BloomVector\022\024\n\014filter_"
-    "count\030\001 \001(\005\022\014\n\004name\030\002 \001(\t\022\n\n\002id\030\003 \001(\005\022\020\n"
-    "\010filesize\030\004 \001(\004", 215);
-  ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
-    "blooms.proto", &protobuf_RegisterTypes);
-  BloomFilter::default_instance_ = new BloomFilter();
-  BloomVector::default_instance_ = new BloomVector();
-  BloomFilter::default_instance_->InitAsDefaultInstance();
-  BloomVector::default_instance_->InitAsDefaultInstance();
-  ::google::protobuf::internal::OnShutdown(&protobuf_ShutdownFile_blooms_2eproto);
+  ::google::protobuf::internal::InitProtobufDefaults();
+  _BloomFilter_default_instance_.DefaultConstruct();
+  _BloomVector_default_instance_.DefaultConstruct();
 }
 
+void InitDefaults() {
+  static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
+  ::google::protobuf::GoogleOnceInit(&once, &TableStruct::InitDefaultsImpl);
+}
+void AddDescriptorsImpl() {
+  InitDefaults();
+  static const char descriptor[] = {
+      "\n\014blooms.proto\022\006blooms\"n\n\013BloomFilter\022\017\n"
+      "\007bf_size\030\001 \001(\004\022\020\n\010max_elem\030\002 \001(\004\022\022\n\nelem"
+      "_count\030\003 \001(\004\022\n\n\002id\030\004 \001(\r\022\014\n\004name\030\005 \001(\t\022\016"
+      "\n\006filter\030\006 \003(\006\"O\n\013BloomVector\022\024\n\014filter_"
+      "count\030\001 \001(\005\022\014\n\004name\030\002 \001(\t\022\n\n\002id\030\003 \001(\005\022\020\n"
+      "\010filesize\030\004 \001(\004"
+  };
+  ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
+      descriptor, 215);
+  ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
+    "blooms.proto", &protobuf_RegisterTypes);
+  ::google::protobuf::internal::OnShutdown(&TableStruct::Shutdown);
+}
+
+void AddDescriptors() {
+  static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
+  ::google::protobuf::GoogleOnceInit(&once, &AddDescriptorsImpl);
+}
 // Force AddDescriptors() to be called at static initialization time.
-struct StaticDescriptorInitializer_blooms_2eproto {
-  StaticDescriptorInitializer_blooms_2eproto() {
-    protobuf_AddDesc_blooms_2eproto();
+struct StaticDescriptorInitializer {
+  StaticDescriptorInitializer() {
+    AddDescriptors();
   }
-} static_descriptor_initializer_blooms_2eproto_;
+} static_descriptor_initializer;
+
+}  // namespace protobuf_blooms_2eproto
+
 
 // ===================================================================
 
-#ifndef _MSC_VER
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
 const int BloomFilter::kBfSizeFieldNumber;
 const int BloomFilter::kMaxElemFieldNumber;
 const int BloomFilter::kElemCountFieldNumber;
 const int BloomFilter::kIdFieldNumber;
 const int BloomFilter::kNameFieldNumber;
 const int BloomFilter::kFilterFieldNumber;
-#endif  // !_MSC_VER
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 BloomFilter::BloomFilter()
-  : ::google::protobuf::Message() {
+  : ::google::protobuf::Message(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    protobuf_blooms_2eproto::InitDefaults();
+  }
   SharedCtor();
   // @@protoc_insertion_point(constructor:blooms.BloomFilter)
 }
-
-void BloomFilter::InitAsDefaultInstance() {
-}
-
 BloomFilter::BloomFilter(const BloomFilter& from)
-  : ::google::protobuf::Message() {
-  SharedCtor();
-  MergeFrom(from);
+  : ::google::protobuf::Message(),
+      _internal_metadata_(NULL),
+      _has_bits_(from._has_bits_),
+      _cached_size_(0),
+      filter_(from.filter_) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.has_name()) {
+    name_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.name_);
+  }
+  ::memcpy(&bf_size_, &from.bf_size_,
+    reinterpret_cast<char*>(&id_) -
+    reinterpret_cast<char*>(&bf_size_) + sizeof(id_));
   // @@protoc_insertion_point(copy_constructor:blooms.BloomFilter)
 }
 
 void BloomFilter::SharedCtor() {
-  ::google::protobuf::internal::GetEmptyString();
   _cached_size_ = 0;
-  bf_size_ = GOOGLE_ULONGLONG(0);
-  max_elem_ = GOOGLE_ULONGLONG(0);
-  elem_count_ = GOOGLE_ULONGLONG(0);
-  id_ = 0u;
-  name_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+  name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  ::memset(&bf_size_, 0, reinterpret_cast<char*>(&id_) -
+    reinterpret_cast<char*>(&bf_size_) + sizeof(id_));
 }
 
 BloomFilter::~BloomFilter() {
@@ -174,11 +212,7 @@ BloomFilter::~BloomFilter() {
 }
 
 void BloomFilter::SharedDtor() {
-  if (name_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
-    delete name_;
-  }
-  if (this != default_instance_) {
-  }
+  name_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 
 void BloomFilter::SetCachedSize(int size) const {
@@ -187,152 +221,135 @@ void BloomFilter::SetCachedSize(int size) const {
   GOOGLE_SAFE_CONCURRENT_WRITES_END();
 }
 const ::google::protobuf::Descriptor* BloomFilter::descriptor() {
-  protobuf_AssignDescriptorsOnce();
-  return BloomFilter_descriptor_;
+  protobuf_blooms_2eproto::protobuf_AssignDescriptorsOnce();
+  return protobuf_blooms_2eproto::file_level_metadata[kIndexInFileMessages].descriptor;
 }
 
 const BloomFilter& BloomFilter::default_instance() {
-  if (default_instance_ == NULL) protobuf_AddDesc_blooms_2eproto();
-  return *default_instance_;
+  protobuf_blooms_2eproto::InitDefaults();
+  return *internal_default_instance();
 }
 
-BloomFilter* BloomFilter::default_instance_ = NULL;
-
-BloomFilter* BloomFilter::New() const {
-  return new BloomFilter;
+BloomFilter* BloomFilter::New(::google::protobuf::Arena* arena) const {
+  BloomFilter* n = new BloomFilter;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
 }
 
 void BloomFilter::Clear() {
-#define OFFSET_OF_FIELD_(f) (reinterpret_cast<char*>(      \
-  &reinterpret_cast<BloomFilter*>(16)->f) - \
-   reinterpret_cast<char*>(16))
-
-#define ZR_(first, last) do {                              \
-    size_t f = OFFSET_OF_FIELD_(first);                    \
-    size_t n = OFFSET_OF_FIELD_(last) - f + sizeof(last);  \
-    ::memset(&first, 0, n);                                \
-  } while (0)
-
-  if (_has_bits_[0 / 32] & 31) {
-    ZR_(bf_size_, elem_count_);
-    id_ = 0u;
-    if (has_name()) {
-      if (name_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
-        name_->clear();
-      }
-    }
-  }
-
-#undef OFFSET_OF_FIELD_
-#undef ZR_
-
+// @@protoc_insertion_point(message_clear_start:blooms.BloomFilter)
   filter_.Clear();
-  ::memset(_has_bits_, 0, sizeof(_has_bits_));
-  mutable_unknown_fields()->Clear();
+  if (has_name()) {
+    GOOGLE_DCHECK(!name_.IsDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited()));
+    (*name_.UnsafeRawStringPointer())->clear();
+  }
+  if (_has_bits_[0 / 32] & 30u) {
+    ::memset(&bf_size_, 0, reinterpret_cast<char*>(&id_) -
+      reinterpret_cast<char*>(&bf_size_) + sizeof(id_));
+  }
+  _has_bits_.Clear();
+  _internal_metadata_.Clear();
 }
 
 bool BloomFilter::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
-#define DO_(EXPRESSION) if (!(EXPRESSION)) goto failure
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
   ::google::protobuf::uint32 tag;
   // @@protoc_insertion_point(parse_start:blooms.BloomFilter)
   for (;;) {
-    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
       // optional uint64 bf_size = 1;
       case 1: {
-        if (tag == 8) {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(8u)) {
+          set_has_bf_size();
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    ::google::protobuf::uint64, ::google::protobuf::internal::WireFormatLite::TYPE_UINT64>(
                  input, &bf_size_)));
-          set_has_bf_size();
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(16)) goto parse_max_elem;
         break;
       }
 
       // optional uint64 max_elem = 2;
       case 2: {
-        if (tag == 16) {
-         parse_max_elem:
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(16u)) {
+          set_has_max_elem();
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    ::google::protobuf::uint64, ::google::protobuf::internal::WireFormatLite::TYPE_UINT64>(
                  input, &max_elem_)));
-          set_has_max_elem();
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(24)) goto parse_elem_count;
         break;
       }
 
       // optional uint64 elem_count = 3;
       case 3: {
-        if (tag == 24) {
-         parse_elem_count:
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(24u)) {
+          set_has_elem_count();
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    ::google::protobuf::uint64, ::google::protobuf::internal::WireFormatLite::TYPE_UINT64>(
                  input, &elem_count_)));
-          set_has_elem_count();
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(32)) goto parse_id;
         break;
       }
 
       // optional uint32 id = 4;
       case 4: {
-        if (tag == 32) {
-         parse_id:
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(32u)) {
+          set_has_id();
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
                  input, &id_)));
-          set_has_id();
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(42)) goto parse_name;
         break;
       }
 
       // optional string name = 5;
       case 5: {
-        if (tag == 42) {
-         parse_name:
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(42u)) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadString(
                 input, this->mutable_name()));
           ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
             this->name().data(), this->name().length(),
             ::google::protobuf::internal::WireFormat::PARSE,
-            "name");
+            "blooms.BloomFilter.name");
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(49)) goto parse_filter;
         break;
       }
 
       // repeated fixed64 filter = 6;
       case 6: {
-        if (tag == 49) {
-         parse_filter:
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(49u)) {
           DO_((::google::protobuf::internal::WireFormatLite::ReadRepeatedPrimitive<
                    ::google::protobuf::uint64, ::google::protobuf::internal::WireFormatLite::TYPE_FIXED64>(
-                 1, 49, input, this->mutable_filter())));
-        } else if (tag == 50) {
+                 1, 49u, input, this->mutable_filter())));
+        } else if (static_cast< ::google::protobuf::uint8>(tag) ==
+                   static_cast< ::google::protobuf::uint8>(50u)) {
           DO_((::google::protobuf::internal::WireFormatLite::ReadPackedPrimitiveNoInline<
                    ::google::protobuf::uint64, ::google::protobuf::internal::WireFormatLite::TYPE_FIXED64>(
                  input, this->mutable_filter())));
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(49)) goto parse_filter;
-        if (input->ExpectAtEnd()) goto success;
         break;
       }
 
@@ -361,90 +378,96 @@ failure:
 void BloomFilter::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:blooms.BloomFilter)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  cached_has_bits = _has_bits_[0];
   // optional uint64 bf_size = 1;
-  if (has_bf_size()) {
+  if (cached_has_bits & 0x00000002u) {
     ::google::protobuf::internal::WireFormatLite::WriteUInt64(1, this->bf_size(), output);
   }
 
   // optional uint64 max_elem = 2;
-  if (has_max_elem()) {
+  if (cached_has_bits & 0x00000004u) {
     ::google::protobuf::internal::WireFormatLite::WriteUInt64(2, this->max_elem(), output);
   }
 
   // optional uint64 elem_count = 3;
-  if (has_elem_count()) {
+  if (cached_has_bits & 0x00000008u) {
     ::google::protobuf::internal::WireFormatLite::WriteUInt64(3, this->elem_count(), output);
   }
 
   // optional uint32 id = 4;
-  if (has_id()) {
+  if (cached_has_bits & 0x00000010u) {
     ::google::protobuf::internal::WireFormatLite::WriteUInt32(4, this->id(), output);
   }
 
   // optional string name = 5;
-  if (has_name()) {
+  if (cached_has_bits & 0x00000001u) {
     ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
       this->name().data(), this->name().length(),
       ::google::protobuf::internal::WireFormat::SERIALIZE,
-      "name");
+      "blooms.BloomFilter.name");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       5, this->name(), output);
   }
 
   // repeated fixed64 filter = 6;
-  for (int i = 0; i < this->filter_size(); i++) {
+  for (int i = 0, n = this->filter_size(); i < n; i++) {
     ::google::protobuf::internal::WireFormatLite::WriteFixed64(
       6, this->filter(i), output);
   }
 
-  if (!unknown_fields().empty()) {
+  if (_internal_metadata_.have_unknown_fields()) {
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         unknown_fields(), output);
   }
   // @@protoc_insertion_point(serialize_end:blooms.BloomFilter)
 }
 
-::google::protobuf::uint8* BloomFilter::SerializeWithCachedSizesToArray(
-    ::google::protobuf::uint8* target) const {
+::google::protobuf::uint8* BloomFilter::InternalSerializeWithCachedSizesToArray(
+    bool deterministic, ::google::protobuf::uint8* target) const {
   // @@protoc_insertion_point(serialize_to_array_start:blooms.BloomFilter)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  cached_has_bits = _has_bits_[0];
   // optional uint64 bf_size = 1;
-  if (has_bf_size()) {
+  if (cached_has_bits & 0x00000002u) {
     target = ::google::protobuf::internal::WireFormatLite::WriteUInt64ToArray(1, this->bf_size(), target);
   }
 
   // optional uint64 max_elem = 2;
-  if (has_max_elem()) {
+  if (cached_has_bits & 0x00000004u) {
     target = ::google::protobuf::internal::WireFormatLite::WriteUInt64ToArray(2, this->max_elem(), target);
   }
 
   // optional uint64 elem_count = 3;
-  if (has_elem_count()) {
+  if (cached_has_bits & 0x00000008u) {
     target = ::google::protobuf::internal::WireFormatLite::WriteUInt64ToArray(3, this->elem_count(), target);
   }
 
   // optional uint32 id = 4;
-  if (has_id()) {
+  if (cached_has_bits & 0x00000010u) {
     target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(4, this->id(), target);
   }
 
   // optional string name = 5;
-  if (has_name()) {
+  if (cached_has_bits & 0x00000001u) {
     ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
       this->name().data(), this->name().length(),
       ::google::protobuf::internal::WireFormat::SERIALIZE,
-      "name");
+      "blooms.BloomFilter.name");
     target =
       ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
         5, this->name(), target);
   }
 
   // repeated fixed64 filter = 6;
-  for (int i = 0; i < this->filter_size(); i++) {
-    target = ::google::protobuf::internal::WireFormatLite::
-      WriteFixed64ToArray(6, this->filter(i), target);
-  }
+  target = ::google::protobuf::internal::WireFormatLite::
+    WriteFixed64ToArray(6, this->filter_, target);
 
-  if (!unknown_fields().empty()) {
+  if (_internal_metadata_.have_unknown_fields()) {
     target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
         unknown_fields(), target);
   }
@@ -452,10 +475,32 @@ void BloomFilter::SerializeWithCachedSizes(
   return target;
 }
 
-int BloomFilter::ByteSize() const {
-  int total_size = 0;
+size_t BloomFilter::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:blooms.BloomFilter)
+  size_t total_size = 0;
 
-  if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+  if (_internal_metadata_.have_unknown_fields()) {
+    total_size +=
+      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+        unknown_fields());
+  }
+  // repeated fixed64 filter = 6;
+  {
+    unsigned int count = this->filter_size();
+    size_t data_size = 8UL * count;
+    total_size += 1 *
+                  ::google::protobuf::internal::FromIntSize(this->filter_size());
+    total_size += data_size;
+  }
+
+  if (_has_bits_[0 / 32] & 31u) {
+    // optional string name = 5;
+    if (has_name()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::StringSize(
+          this->name());
+    }
+
     // optional uint64 bf_size = 1;
     if (has_bf_size()) {
       total_size += 1 +
@@ -484,140 +529,330 @@ int BloomFilter::ByteSize() const {
           this->id());
     }
 
-    // optional string name = 5;
-    if (has_name()) {
-      total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::StringSize(
-          this->name());
-    }
-
   }
-  // repeated fixed64 filter = 6;
-  {
-    int data_size = 0;
-    data_size = 8 * this->filter_size();
-    total_size += 1 * this->filter_size() + data_size;
-  }
-
-  if (!unknown_fields().empty()) {
-    total_size +=
-      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
-        unknown_fields());
-  }
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = total_size;
+  _cached_size_ = cached_size;
   GOOGLE_SAFE_CONCURRENT_WRITES_END();
   return total_size;
 }
 
 void BloomFilter::MergeFrom(const ::google::protobuf::Message& from) {
-  GOOGLE_CHECK_NE(&from, this);
+// @@protoc_insertion_point(generalized_merge_from_start:blooms.BloomFilter)
+  GOOGLE_DCHECK_NE(&from, this);
   const BloomFilter* source =
-    ::google::protobuf::internal::dynamic_cast_if_available<const BloomFilter*>(
-      &from);
+      ::google::protobuf::internal::DynamicCastToGenerated<const BloomFilter>(
+          &from);
   if (source == NULL) {
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:blooms.BloomFilter)
     ::google::protobuf::internal::ReflectionOps::Merge(from, this);
   } else {
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:blooms.BloomFilter)
     MergeFrom(*source);
   }
 }
 
 void BloomFilter::MergeFrom(const BloomFilter& from) {
-  GOOGLE_CHECK_NE(&from, this);
+// @@protoc_insertion_point(class_specific_merge_from_start:blooms.BloomFilter)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
   filter_.MergeFrom(from.filter_);
-  if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
-    if (from.has_bf_size()) {
-      set_bf_size(from.bf_size());
+  cached_has_bits = from._has_bits_[0];
+  if (cached_has_bits & 31u) {
+    if (cached_has_bits & 0x00000001u) {
+      set_has_name();
+      name_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.name_);
     }
-    if (from.has_max_elem()) {
-      set_max_elem(from.max_elem());
+    if (cached_has_bits & 0x00000002u) {
+      bf_size_ = from.bf_size_;
     }
-    if (from.has_elem_count()) {
-      set_elem_count(from.elem_count());
+    if (cached_has_bits & 0x00000004u) {
+      max_elem_ = from.max_elem_;
     }
-    if (from.has_id()) {
-      set_id(from.id());
+    if (cached_has_bits & 0x00000008u) {
+      elem_count_ = from.elem_count_;
     }
-    if (from.has_name()) {
-      set_name(from.name());
+    if (cached_has_bits & 0x00000010u) {
+      id_ = from.id_;
     }
+    _has_bits_[0] |= cached_has_bits;
   }
-  mutable_unknown_fields()->MergeFrom(from.unknown_fields());
 }
 
 void BloomFilter::CopyFrom(const ::google::protobuf::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:blooms.BloomFilter)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
 void BloomFilter::CopyFrom(const BloomFilter& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:blooms.BloomFilter)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
 bool BloomFilter::IsInitialized() const {
-
   return true;
 }
 
 void BloomFilter::Swap(BloomFilter* other) {
-  if (other != this) {
-    std::swap(bf_size_, other->bf_size_);
-    std::swap(max_elem_, other->max_elem_);
-    std::swap(elem_count_, other->elem_count_);
-    std::swap(id_, other->id_);
-    std::swap(name_, other->name_);
-    filter_.Swap(&other->filter_);
-    std::swap(_has_bits_[0], other->_has_bits_[0]);
-    _unknown_fields_.Swap(&other->_unknown_fields_);
-    std::swap(_cached_size_, other->_cached_size_);
-  }
+  if (other == this) return;
+  InternalSwap(other);
+}
+void BloomFilter::InternalSwap(BloomFilter* other) {
+  filter_.InternalSwap(&other->filter_);
+  name_.Swap(&other->name_);
+  std::swap(bf_size_, other->bf_size_);
+  std::swap(max_elem_, other->max_elem_);
+  std::swap(elem_count_, other->elem_count_);
+  std::swap(id_, other->id_);
+  std::swap(_has_bits_[0], other->_has_bits_[0]);
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  std::swap(_cached_size_, other->_cached_size_);
 }
 
 ::google::protobuf::Metadata BloomFilter::GetMetadata() const {
-  protobuf_AssignDescriptorsOnce();
-  ::google::protobuf::Metadata metadata;
-  metadata.descriptor = BloomFilter_descriptor_;
-  metadata.reflection = BloomFilter_reflection_;
-  return metadata;
+  protobuf_blooms_2eproto::protobuf_AssignDescriptorsOnce();
+  return protobuf_blooms_2eproto::file_level_metadata[kIndexInFileMessages];
 }
 
+#if PROTOBUF_INLINE_NOT_IN_HEADERS
+// BloomFilter
+
+// optional uint64 bf_size = 1;
+bool BloomFilter::has_bf_size() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+void BloomFilter::set_has_bf_size() {
+  _has_bits_[0] |= 0x00000002u;
+}
+void BloomFilter::clear_has_bf_size() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+void BloomFilter::clear_bf_size() {
+  bf_size_ = GOOGLE_ULONGLONG(0);
+  clear_has_bf_size();
+}
+::google::protobuf::uint64 BloomFilter::bf_size() const {
+  // @@protoc_insertion_point(field_get:blooms.BloomFilter.bf_size)
+  return bf_size_;
+}
+void BloomFilter::set_bf_size(::google::protobuf::uint64 value) {
+  set_has_bf_size();
+  bf_size_ = value;
+  // @@protoc_insertion_point(field_set:blooms.BloomFilter.bf_size)
+}
+
+// optional uint64 max_elem = 2;
+bool BloomFilter::has_max_elem() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+void BloomFilter::set_has_max_elem() {
+  _has_bits_[0] |= 0x00000004u;
+}
+void BloomFilter::clear_has_max_elem() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+void BloomFilter::clear_max_elem() {
+  max_elem_ = GOOGLE_ULONGLONG(0);
+  clear_has_max_elem();
+}
+::google::protobuf::uint64 BloomFilter::max_elem() const {
+  // @@protoc_insertion_point(field_get:blooms.BloomFilter.max_elem)
+  return max_elem_;
+}
+void BloomFilter::set_max_elem(::google::protobuf::uint64 value) {
+  set_has_max_elem();
+  max_elem_ = value;
+  // @@protoc_insertion_point(field_set:blooms.BloomFilter.max_elem)
+}
+
+// optional uint64 elem_count = 3;
+bool BloomFilter::has_elem_count() const {
+  return (_has_bits_[0] & 0x00000008u) != 0;
+}
+void BloomFilter::set_has_elem_count() {
+  _has_bits_[0] |= 0x00000008u;
+}
+void BloomFilter::clear_has_elem_count() {
+  _has_bits_[0] &= ~0x00000008u;
+}
+void BloomFilter::clear_elem_count() {
+  elem_count_ = GOOGLE_ULONGLONG(0);
+  clear_has_elem_count();
+}
+::google::protobuf::uint64 BloomFilter::elem_count() const {
+  // @@protoc_insertion_point(field_get:blooms.BloomFilter.elem_count)
+  return elem_count_;
+}
+void BloomFilter::set_elem_count(::google::protobuf::uint64 value) {
+  set_has_elem_count();
+  elem_count_ = value;
+  // @@protoc_insertion_point(field_set:blooms.BloomFilter.elem_count)
+}
+
+// optional uint32 id = 4;
+bool BloomFilter::has_id() const {
+  return (_has_bits_[0] & 0x00000010u) != 0;
+}
+void BloomFilter::set_has_id() {
+  _has_bits_[0] |= 0x00000010u;
+}
+void BloomFilter::clear_has_id() {
+  _has_bits_[0] &= ~0x00000010u;
+}
+void BloomFilter::clear_id() {
+  id_ = 0u;
+  clear_has_id();
+}
+::google::protobuf::uint32 BloomFilter::id() const {
+  // @@protoc_insertion_point(field_get:blooms.BloomFilter.id)
+  return id_;
+}
+void BloomFilter::set_id(::google::protobuf::uint32 value) {
+  set_has_id();
+  id_ = value;
+  // @@protoc_insertion_point(field_set:blooms.BloomFilter.id)
+}
+
+// optional string name = 5;
+bool BloomFilter::has_name() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+void BloomFilter::set_has_name() {
+  _has_bits_[0] |= 0x00000001u;
+}
+void BloomFilter::clear_has_name() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+void BloomFilter::clear_name() {
+  name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  clear_has_name();
+}
+const ::std::string& BloomFilter::name() const {
+  // @@protoc_insertion_point(field_get:blooms.BloomFilter.name)
+  return name_.GetNoArena();
+}
+void BloomFilter::set_name(const ::std::string& value) {
+  set_has_name();
+  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:blooms.BloomFilter.name)
+}
+#if LANG_CXX11
+void BloomFilter::set_name(::std::string&& value) {
+  set_has_name();
+  name_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:blooms.BloomFilter.name)
+}
+#endif
+void BloomFilter::set_name(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  set_has_name();
+  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:blooms.BloomFilter.name)
+}
+void BloomFilter::set_name(const char* value, size_t size) {
+  set_has_name();
+  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:blooms.BloomFilter.name)
+}
+::std::string* BloomFilter::mutable_name() {
+  set_has_name();
+  // @@protoc_insertion_point(field_mutable:blooms.BloomFilter.name)
+  return name_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+::std::string* BloomFilter::release_name() {
+  // @@protoc_insertion_point(field_release:blooms.BloomFilter.name)
+  clear_has_name();
+  return name_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+void BloomFilter::set_allocated_name(::std::string* name) {
+  if (name != NULL) {
+    set_has_name();
+  } else {
+    clear_has_name();
+  }
+  name_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), name);
+  // @@protoc_insertion_point(field_set_allocated:blooms.BloomFilter.name)
+}
+
+// repeated fixed64 filter = 6;
+int BloomFilter::filter_size() const {
+  return filter_.size();
+}
+void BloomFilter::clear_filter() {
+  filter_.Clear();
+}
+::google::protobuf::uint64 BloomFilter::filter(int index) const {
+  // @@protoc_insertion_point(field_get:blooms.BloomFilter.filter)
+  return filter_.Get(index);
+}
+void BloomFilter::set_filter(int index, ::google::protobuf::uint64 value) {
+  filter_.Set(index, value);
+  // @@protoc_insertion_point(field_set:blooms.BloomFilter.filter)
+}
+void BloomFilter::add_filter(::google::protobuf::uint64 value) {
+  filter_.Add(value);
+  // @@protoc_insertion_point(field_add:blooms.BloomFilter.filter)
+}
+const ::google::protobuf::RepeatedField< ::google::protobuf::uint64 >&
+BloomFilter::filter() const {
+  // @@protoc_insertion_point(field_list:blooms.BloomFilter.filter)
+  return filter_;
+}
+::google::protobuf::RepeatedField< ::google::protobuf::uint64 >*
+BloomFilter::mutable_filter() {
+  // @@protoc_insertion_point(field_mutable_list:blooms.BloomFilter.filter)
+  return &filter_;
+}
+
+#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
 
 // ===================================================================
 
-#ifndef _MSC_VER
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
 const int BloomVector::kFilterCountFieldNumber;
 const int BloomVector::kNameFieldNumber;
 const int BloomVector::kIdFieldNumber;
 const int BloomVector::kFilesizeFieldNumber;
-#endif  // !_MSC_VER
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 BloomVector::BloomVector()
-  : ::google::protobuf::Message() {
+  : ::google::protobuf::Message(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    protobuf_blooms_2eproto::InitDefaults();
+  }
   SharedCtor();
   // @@protoc_insertion_point(constructor:blooms.BloomVector)
 }
-
-void BloomVector::InitAsDefaultInstance() {
-}
-
 BloomVector::BloomVector(const BloomVector& from)
-  : ::google::protobuf::Message() {
-  SharedCtor();
-  MergeFrom(from);
+  : ::google::protobuf::Message(),
+      _internal_metadata_(NULL),
+      _has_bits_(from._has_bits_),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.has_name()) {
+    name_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.name_);
+  }
+  ::memcpy(&filter_count_, &from.filter_count_,
+    reinterpret_cast<char*>(&filesize_) -
+    reinterpret_cast<char*>(&filter_count_) + sizeof(filesize_));
   // @@protoc_insertion_point(copy_constructor:blooms.BloomVector)
 }
 
 void BloomVector::SharedCtor() {
-  ::google::protobuf::internal::GetEmptyString();
   _cached_size_ = 0;
-  filter_count_ = 0;
-  name_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  id_ = 0;
-  filesize_ = GOOGLE_ULONGLONG(0);
-  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+  name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  ::memset(&filter_count_, 0, reinterpret_cast<char*>(&filesize_) -
+    reinterpret_cast<char*>(&filter_count_) + sizeof(filesize_));
 }
 
 BloomVector::~BloomVector() {
@@ -626,11 +861,7 @@ BloomVector::~BloomVector() {
 }
 
 void BloomVector::SharedDtor() {
-  if (name_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
-    delete name_;
-  }
-  if (this != default_instance_) {
-  }
+  name_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 
 void BloomVector::SetCachedSize(int size) const {
@@ -639,116 +870,102 @@ void BloomVector::SetCachedSize(int size) const {
   GOOGLE_SAFE_CONCURRENT_WRITES_END();
 }
 const ::google::protobuf::Descriptor* BloomVector::descriptor() {
-  protobuf_AssignDescriptorsOnce();
-  return BloomVector_descriptor_;
+  protobuf_blooms_2eproto::protobuf_AssignDescriptorsOnce();
+  return protobuf_blooms_2eproto::file_level_metadata[kIndexInFileMessages].descriptor;
 }
 
 const BloomVector& BloomVector::default_instance() {
-  if (default_instance_ == NULL) protobuf_AddDesc_blooms_2eproto();
-  return *default_instance_;
+  protobuf_blooms_2eproto::InitDefaults();
+  return *internal_default_instance();
 }
 
-BloomVector* BloomVector::default_instance_ = NULL;
-
-BloomVector* BloomVector::New() const {
-  return new BloomVector;
+BloomVector* BloomVector::New(::google::protobuf::Arena* arena) const {
+  BloomVector* n = new BloomVector;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
 }
 
 void BloomVector::Clear() {
-#define OFFSET_OF_FIELD_(f) (reinterpret_cast<char*>(      \
-  &reinterpret_cast<BloomVector*>(16)->f) - \
-   reinterpret_cast<char*>(16))
-
-#define ZR_(first, last) do {                              \
-    size_t f = OFFSET_OF_FIELD_(first);                    \
-    size_t n = OFFSET_OF_FIELD_(last) - f + sizeof(last);  \
-    ::memset(&first, 0, n);                                \
-  } while (0)
-
-  if (_has_bits_[0 / 32] & 15) {
-    ZR_(filter_count_, filesize_);
-    if (has_name()) {
-      if (name_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
-        name_->clear();
-      }
-    }
+// @@protoc_insertion_point(message_clear_start:blooms.BloomVector)
+  if (has_name()) {
+    GOOGLE_DCHECK(!name_.IsDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited()));
+    (*name_.UnsafeRawStringPointer())->clear();
   }
-
-#undef OFFSET_OF_FIELD_
-#undef ZR_
-
-  ::memset(_has_bits_, 0, sizeof(_has_bits_));
-  mutable_unknown_fields()->Clear();
+  if (_has_bits_[0 / 32] & 14u) {
+    ::memset(&filter_count_, 0, reinterpret_cast<char*>(&filesize_) -
+      reinterpret_cast<char*>(&filter_count_) + sizeof(filesize_));
+  }
+  _has_bits_.Clear();
+  _internal_metadata_.Clear();
 }
 
 bool BloomVector::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
-#define DO_(EXPRESSION) if (!(EXPRESSION)) goto failure
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
   ::google::protobuf::uint32 tag;
   // @@protoc_insertion_point(parse_start:blooms.BloomVector)
   for (;;) {
-    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
       // optional int32 filter_count = 1;
       case 1: {
-        if (tag == 8) {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(8u)) {
+          set_has_filter_count();
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
                  input, &filter_count_)));
-          set_has_filter_count();
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(18)) goto parse_name;
         break;
       }
 
       // optional string name = 2;
       case 2: {
-        if (tag == 18) {
-         parse_name:
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(18u)) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadString(
                 input, this->mutable_name()));
           ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
             this->name().data(), this->name().length(),
             ::google::protobuf::internal::WireFormat::PARSE,
-            "name");
+            "blooms.BloomVector.name");
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(24)) goto parse_id;
         break;
       }
 
       // optional int32 id = 3;
       case 3: {
-        if (tag == 24) {
-         parse_id:
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(24u)) {
+          set_has_id();
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
                  input, &id_)));
-          set_has_id();
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(32)) goto parse_filesize;
         break;
       }
 
       // optional uint64 filesize = 4;
       case 4: {
-        if (tag == 32) {
-         parse_filesize:
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(32u)) {
+          set_has_filesize();
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    ::google::protobuf::uint64, ::google::protobuf::internal::WireFormatLite::TYPE_UINT64>(
                  input, &filesize_)));
-          set_has_filesize();
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectAtEnd()) goto success;
         break;
       }
 
@@ -777,68 +994,76 @@ failure:
 void BloomVector::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:blooms.BloomVector)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  cached_has_bits = _has_bits_[0];
   // optional int32 filter_count = 1;
-  if (has_filter_count()) {
+  if (cached_has_bits & 0x00000002u) {
     ::google::protobuf::internal::WireFormatLite::WriteInt32(1, this->filter_count(), output);
   }
 
   // optional string name = 2;
-  if (has_name()) {
+  if (cached_has_bits & 0x00000001u) {
     ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
       this->name().data(), this->name().length(),
       ::google::protobuf::internal::WireFormat::SERIALIZE,
-      "name");
+      "blooms.BloomVector.name");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       2, this->name(), output);
   }
 
   // optional int32 id = 3;
-  if (has_id()) {
+  if (cached_has_bits & 0x00000004u) {
     ::google::protobuf::internal::WireFormatLite::WriteInt32(3, this->id(), output);
   }
 
   // optional uint64 filesize = 4;
-  if (has_filesize()) {
+  if (cached_has_bits & 0x00000008u) {
     ::google::protobuf::internal::WireFormatLite::WriteUInt64(4, this->filesize(), output);
   }
 
-  if (!unknown_fields().empty()) {
+  if (_internal_metadata_.have_unknown_fields()) {
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         unknown_fields(), output);
   }
   // @@protoc_insertion_point(serialize_end:blooms.BloomVector)
 }
 
-::google::protobuf::uint8* BloomVector::SerializeWithCachedSizesToArray(
-    ::google::protobuf::uint8* target) const {
+::google::protobuf::uint8* BloomVector::InternalSerializeWithCachedSizesToArray(
+    bool deterministic, ::google::protobuf::uint8* target) const {
   // @@protoc_insertion_point(serialize_to_array_start:blooms.BloomVector)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  cached_has_bits = _has_bits_[0];
   // optional int32 filter_count = 1;
-  if (has_filter_count()) {
+  if (cached_has_bits & 0x00000002u) {
     target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(1, this->filter_count(), target);
   }
 
   // optional string name = 2;
-  if (has_name()) {
+  if (cached_has_bits & 0x00000001u) {
     ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
       this->name().data(), this->name().length(),
       ::google::protobuf::internal::WireFormat::SERIALIZE,
-      "name");
+      "blooms.BloomVector.name");
     target =
       ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
         2, this->name(), target);
   }
 
   // optional int32 id = 3;
-  if (has_id()) {
+  if (cached_has_bits & 0x00000004u) {
     target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(3, this->id(), target);
   }
 
   // optional uint64 filesize = 4;
-  if (has_filesize()) {
+  if (cached_has_bits & 0x00000008u) {
     target = ::google::protobuf::internal::WireFormatLite::WriteUInt64ToArray(4, this->filesize(), target);
   }
 
-  if (!unknown_fields().empty()) {
+  if (_internal_metadata_.have_unknown_fields()) {
     target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
         unknown_fields(), target);
   }
@@ -846,22 +1071,28 @@ void BloomVector::SerializeWithCachedSizes(
   return target;
 }
 
-int BloomVector::ByteSize() const {
-  int total_size = 0;
+size_t BloomVector::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:blooms.BloomVector)
+  size_t total_size = 0;
 
-  if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
-    // optional int32 filter_count = 1;
-    if (has_filter_count()) {
-      total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::Int32Size(
-          this->filter_count());
-    }
-
+  if (_internal_metadata_.have_unknown_fields()) {
+    total_size +=
+      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+        unknown_fields());
+  }
+  if (_has_bits_[0 / 32] & 15u) {
     // optional string name = 2;
     if (has_name()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::StringSize(
           this->name());
+    }
+
+    // optional int32 filter_count = 1;
+    if (has_filter_count()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::Int32Size(
+          this->filter_count());
     }
 
     // optional int32 id = 3;
@@ -879,85 +1110,230 @@ int BloomVector::ByteSize() const {
     }
 
   }
-  if (!unknown_fields().empty()) {
-    total_size +=
-      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
-        unknown_fields());
-  }
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = total_size;
+  _cached_size_ = cached_size;
   GOOGLE_SAFE_CONCURRENT_WRITES_END();
   return total_size;
 }
 
 void BloomVector::MergeFrom(const ::google::protobuf::Message& from) {
-  GOOGLE_CHECK_NE(&from, this);
+// @@protoc_insertion_point(generalized_merge_from_start:blooms.BloomVector)
+  GOOGLE_DCHECK_NE(&from, this);
   const BloomVector* source =
-    ::google::protobuf::internal::dynamic_cast_if_available<const BloomVector*>(
-      &from);
+      ::google::protobuf::internal::DynamicCastToGenerated<const BloomVector>(
+          &from);
   if (source == NULL) {
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:blooms.BloomVector)
     ::google::protobuf::internal::ReflectionOps::Merge(from, this);
   } else {
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:blooms.BloomVector)
     MergeFrom(*source);
   }
 }
 
 void BloomVector::MergeFrom(const BloomVector& from) {
-  GOOGLE_CHECK_NE(&from, this);
-  if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
-    if (from.has_filter_count()) {
-      set_filter_count(from.filter_count());
+// @@protoc_insertion_point(class_specific_merge_from_start:blooms.BloomVector)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  cached_has_bits = from._has_bits_[0];
+  if (cached_has_bits & 15u) {
+    if (cached_has_bits & 0x00000001u) {
+      set_has_name();
+      name_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.name_);
     }
-    if (from.has_name()) {
-      set_name(from.name());
+    if (cached_has_bits & 0x00000002u) {
+      filter_count_ = from.filter_count_;
     }
-    if (from.has_id()) {
-      set_id(from.id());
+    if (cached_has_bits & 0x00000004u) {
+      id_ = from.id_;
     }
-    if (from.has_filesize()) {
-      set_filesize(from.filesize());
+    if (cached_has_bits & 0x00000008u) {
+      filesize_ = from.filesize_;
     }
+    _has_bits_[0] |= cached_has_bits;
   }
-  mutable_unknown_fields()->MergeFrom(from.unknown_fields());
 }
 
 void BloomVector::CopyFrom(const ::google::protobuf::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:blooms.BloomVector)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
 void BloomVector::CopyFrom(const BloomVector& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:blooms.BloomVector)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
 bool BloomVector::IsInitialized() const {
-
   return true;
 }
 
 void BloomVector::Swap(BloomVector* other) {
-  if (other != this) {
-    std::swap(filter_count_, other->filter_count_);
-    std::swap(name_, other->name_);
-    std::swap(id_, other->id_);
-    std::swap(filesize_, other->filesize_);
-    std::swap(_has_bits_[0], other->_has_bits_[0]);
-    _unknown_fields_.Swap(&other->_unknown_fields_);
-    std::swap(_cached_size_, other->_cached_size_);
-  }
+  if (other == this) return;
+  InternalSwap(other);
+}
+void BloomVector::InternalSwap(BloomVector* other) {
+  name_.Swap(&other->name_);
+  std::swap(filter_count_, other->filter_count_);
+  std::swap(id_, other->id_);
+  std::swap(filesize_, other->filesize_);
+  std::swap(_has_bits_[0], other->_has_bits_[0]);
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  std::swap(_cached_size_, other->_cached_size_);
 }
 
 ::google::protobuf::Metadata BloomVector::GetMetadata() const {
-  protobuf_AssignDescriptorsOnce();
-  ::google::protobuf::Metadata metadata;
-  metadata.descriptor = BloomVector_descriptor_;
-  metadata.reflection = BloomVector_reflection_;
-  return metadata;
+  protobuf_blooms_2eproto::protobuf_AssignDescriptorsOnce();
+  return protobuf_blooms_2eproto::file_level_metadata[kIndexInFileMessages];
 }
 
+#if PROTOBUF_INLINE_NOT_IN_HEADERS
+// BloomVector
+
+// optional int32 filter_count = 1;
+bool BloomVector::has_filter_count() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+void BloomVector::set_has_filter_count() {
+  _has_bits_[0] |= 0x00000002u;
+}
+void BloomVector::clear_has_filter_count() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+void BloomVector::clear_filter_count() {
+  filter_count_ = 0;
+  clear_has_filter_count();
+}
+::google::protobuf::int32 BloomVector::filter_count() const {
+  // @@protoc_insertion_point(field_get:blooms.BloomVector.filter_count)
+  return filter_count_;
+}
+void BloomVector::set_filter_count(::google::protobuf::int32 value) {
+  set_has_filter_count();
+  filter_count_ = value;
+  // @@protoc_insertion_point(field_set:blooms.BloomVector.filter_count)
+}
+
+// optional string name = 2;
+bool BloomVector::has_name() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+void BloomVector::set_has_name() {
+  _has_bits_[0] |= 0x00000001u;
+}
+void BloomVector::clear_has_name() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+void BloomVector::clear_name() {
+  name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  clear_has_name();
+}
+const ::std::string& BloomVector::name() const {
+  // @@protoc_insertion_point(field_get:blooms.BloomVector.name)
+  return name_.GetNoArena();
+}
+void BloomVector::set_name(const ::std::string& value) {
+  set_has_name();
+  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:blooms.BloomVector.name)
+}
+#if LANG_CXX11
+void BloomVector::set_name(::std::string&& value) {
+  set_has_name();
+  name_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:blooms.BloomVector.name)
+}
+#endif
+void BloomVector::set_name(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  set_has_name();
+  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:blooms.BloomVector.name)
+}
+void BloomVector::set_name(const char* value, size_t size) {
+  set_has_name();
+  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:blooms.BloomVector.name)
+}
+::std::string* BloomVector::mutable_name() {
+  set_has_name();
+  // @@protoc_insertion_point(field_mutable:blooms.BloomVector.name)
+  return name_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+::std::string* BloomVector::release_name() {
+  // @@protoc_insertion_point(field_release:blooms.BloomVector.name)
+  clear_has_name();
+  return name_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+void BloomVector::set_allocated_name(::std::string* name) {
+  if (name != NULL) {
+    set_has_name();
+  } else {
+    clear_has_name();
+  }
+  name_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), name);
+  // @@protoc_insertion_point(field_set_allocated:blooms.BloomVector.name)
+}
+
+// optional int32 id = 3;
+bool BloomVector::has_id() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+void BloomVector::set_has_id() {
+  _has_bits_[0] |= 0x00000004u;
+}
+void BloomVector::clear_has_id() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+void BloomVector::clear_id() {
+  id_ = 0;
+  clear_has_id();
+}
+::google::protobuf::int32 BloomVector::id() const {
+  // @@protoc_insertion_point(field_get:blooms.BloomVector.id)
+  return id_;
+}
+void BloomVector::set_id(::google::protobuf::int32 value) {
+  set_has_id();
+  id_ = value;
+  // @@protoc_insertion_point(field_set:blooms.BloomVector.id)
+}
+
+// optional uint64 filesize = 4;
+bool BloomVector::has_filesize() const {
+  return (_has_bits_[0] & 0x00000008u) != 0;
+}
+void BloomVector::set_has_filesize() {
+  _has_bits_[0] |= 0x00000008u;
+}
+void BloomVector::clear_has_filesize() {
+  _has_bits_[0] &= ~0x00000008u;
+}
+void BloomVector::clear_filesize() {
+  filesize_ = GOOGLE_ULONGLONG(0);
+  clear_has_filesize();
+}
+::google::protobuf::uint64 BloomVector::filesize() const {
+  // @@protoc_insertion_point(field_get:blooms.BloomVector.filesize)
+  return filesize_;
+}
+void BloomVector::set_filesize(::google::protobuf::uint64 value) {
+  set_has_filesize();
+  filesize_ = value;
+  // @@protoc_insertion_point(field_set:blooms.BloomVector.filesize)
+}
+
+#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
 
 // @@protoc_insertion_point(namespace_scope)
 
