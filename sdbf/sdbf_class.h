@@ -42,7 +42,9 @@ public:
     ~sdbf(); 
 
     /// object name
-    const char *name();  
+    //const char *name(); 
+    string name() const;
+
     /// object size
     uint64_t size();  
     /// source object size
@@ -101,7 +103,7 @@ private:
     string index_results;
         
     // from the C structure 
-    char *hashname;          // name (usually, source file)
+    string hashname;          // name (usually, source file)
     uint32_t  bf_count;      // Number of BFs
     uint32_t  bf_size;       // BF size in bytes (==m/8)
     uint32_t  hash_count;    // Number of hash functions used (k)
