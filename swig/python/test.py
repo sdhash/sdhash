@@ -1,58 +1,54 @@
 #!/usr/bin/python
-
-# Import our module, living in the same directory as _sdbf_class.so
+# 
+# IMPORTANT: Any edits to sdbf.i will break these tests
+#
+# test.py - Unittests for the sdhash python swig interface
+# @brad_anton 
+# 2020-10-10
+#
 import sdbf_class
+import unittest
 
-# Name a few standalone objects to hash
-name = "sdbf_class.py"
-name2 = "sdbf_class.pyc"
+from os.path import getsize
 
-# Create new objects from these names, in "regular" non-block mode.
-test1 = sdbf_class.sdbf(name,0)
-test2 = sdbf_class.sdbf(name2,0)
+class TestSdbfClass(unittest.TestCase):
+    TEST_FILE="sdbf.i"
+    TEST_FILE_SDBF="sdbf:03:6:sdbf.i:2333:sha1:256:5:7ff:160:1:42:EBAAAAAIxgEAAAEAAAgAAAAAAAgEQAiAAAAAAAAAgAAQAQMAwSGAigQACCEIDhEACABAAAAIAAQAAAQAAgEBIAFAAgIIAkAEAAAMAUQAABAQCQAAQAAmAAACAAAAAGAAJAAkQgAEiAAgEAQQEAAAEAQBggAAAABAgCBgIAIAAAmCAAAGCAAECAgDAAABAAABASABUAAAAAAIAAAIEACCAIAAADAAECAAAABAEAABACEQAAAAAACEAAAhAQgAAUAABggAAAqIAAYAmAAIJBAEgAAQJDABgAMAIEAQEAAAACBAgACAgAAQQAVAgAAEAAGAAAAAAgwAEigAAAAIBgYBCA=="
+    
+    def check_sdbf(self, sdbf, expected_sdbf):
+        parts = expected_sdbf.split(':')
 
-# print out some vital statistics and the hash itself
-print "test 1"
-print test1.name()
-print test1.size()
-print test1.input_size()
-print test1.to_string()
+        self.assertIsNotNone(sdbf)
+        self.assertEqual(sdbf.to_string(), expected_sdbf)
+        self.assertEqual(sdbf.name(), parts[3])
+        self.assertEqual(len(sdbf.name()), int(parts[2])) # A little redundant
+        # .size() should be bf_size * bf_count
+        self.assertEqual(sdbf.size(), int(parts[6]) * int(parts[10]))
+        self.assertEqual(sdbf.input_size(), int(parts[4]))
 
-print "test 2"
-print test2.name()
-print test2.size()
-print test2.input_size()
-bar=test2.to_string()
+    def test_formated_string(self):
+        s = sdbf_class.sdbf(self.TEST_FILE_SDBF)
+        self.check_sdbf(s, "{}\n".format(self.TEST_FILE_SDBF))
 
-print bar
+    def test_read_file(self):
+        s = sdbf_class.sdbf(self.TEST_FILE, 0)
+        self.check_sdbf(s, "{}\n".format(self.TEST_FILE_SDBF))
 
-#test2.print_sdbf(test2)
+    """
+    This current doesn't work, but i *think* it could with a little swig typemap magic
 
-# Compare the two hashes and get back a score
-score = test1.compare(test2,0)
+    def test_read_filestream(self):
+        size = getsize(self.TEST_FILE)
+        with open(self.TEST_FILE, 'rb') as f:
+            s = sdbf_class.sdbf(self.TEST_FILE, f, 0, size, None)
+            self.check_sdbf(s, "{}\n".format(self.TEST_FILE_SDBF))
+    """
 
-# display our score
-print test1.name(), " vs ", test2.name(),": ",score
+    def test_read_cstring(self):
+        with open(self.TEST_FILE, 'rb') as f:
+            data = f.read()
+            s = sdbf_class.sdbf(self.TEST_FILE, data, 0, len(data), None)
+            self.check_sdbf(s, "{}\n".format(self.TEST_FILE_SDBF))
 
-# Block mode test:
-name3 = "sdbf_class.py"
-# Note that creating this object you must give the "real size" of the block
-test3 = sdbf_class.sdbf(name3,16*1024)
-
-# Shows name
-print test3.name()
-
-# Displays block-mode sdbf
-#print test3.tostring(); // still working on these two
-#print test3;
-print test3.to_string()
-
-# This needs to be filled with an existing test file... 
-#myfile = sdbf_class.fopen("/home/candice/serverhome/newKitty.sdbf","r")
-# add  in a loop here.
-#test4= sdbf_class.sdbf(myfile);
-
-#print test4.get_name()
-#test4.print_sdbf(test4)
-
-#sdbf_class.fclose(myfile)
+if __name__ == '__main__':
+    unittest.main()

@@ -154,9 +154,12 @@ sdbf::sdbf(const std::string& str) {
     std::getline(ss,process,':');
     std::getline(ss,process,':'); 
     std::getline(ss,process,':'); // copy+allocate in
+    this->hashname = process;
+    /*
     this->filenamealloc=true;
     this->hashname = (char*)alloc_check( ALLOC_ZERO, process.length()+1, "sdbf_from_stream", "this->hashname", ERROR_EXIT);
     strncpy(this->hashname,process.c_str(),process.length()+1);
+    */
     std::getline(ss,process,':');  // set
     this->orig_file_size=boost::lexical_cast<uint64_t>(process);
     std::getline(ss,process,':');  // sha1 // auto
@@ -188,7 +191,7 @@ sdbf::sdbf(const std::string& str) {
            d_len = b64decode_into( (uint8_t*)process.c_str(), 344, this->buffer + i*this->bf_size); 
            if( d_len != 256) {
                if (config->warnings)
-                   fprintf( stderr, "ERROR: Unexpected decoded length for BF: %d. name: %s, BF#: %d\n", d_len, this->hashname, (int)i);
+                   fprintf( stderr, "ERROR: Unexpected decoded length for BF: %d. name: %s, BF#: %d\n", d_len, this->hashname.c_str(), (int)i);
                throw -2; // unsupported format - caller should exit
            }
        }
@@ -224,17 +227,21 @@ sdbf::~sdbf() {
         free(hamming);
     if (elem_counts)
         free(elem_counts);
-    if (filenamealloc)
+    /*
+    if (filenamealloc) {
+        fprintf(stdout, "BRADTEST sdbf::~sdbf() 2: %s, %p\n", this->hashname.c_str(), (void *)&this->hashname);
         free(hashname);
+    }
+    */
 } 
 
 /**
     Returns the name of the file or data this sdbf represents.
     \returns char* of file name
 */
-const char *
-sdbf::name() {
-    return (char*)this->hashname;
+string
+sdbf::name() const {
+    return this->hashname;
 } 
 
 /** 
@@ -297,7 +304,7 @@ sdbf::to_string () const { // write self to stream
     if( !this->elem_counts) {
         hash.fill('0');
         hash << MAGIC_STREAM << ":" << setw (2) << SDBF_VERSION << ":";    
-        hash << (int)strlen((char*)this->hashname) << ":" << this->hashname << ":" << this->orig_file_size << ":sha1:";    
+        hash << (int)strlen((char*)this->hashname.c_str()) << ":" << this->hashname << ":" << this->orig_file_size << ":sha1:";    
         hash << this->bf_size << ":" << this->hash_count<< ":" << hex << this->mask << ":" << dec;    
         hash << this->max_elem << ":" << this->bf_count << ":" << this->last_count << ":";    
         uint64_t qt = this->bf_count/6, rem = this->bf_count % 6;
@@ -315,7 +322,7 @@ sdbf::to_string () const { // write self to stream
     } else { // block version
         hash.fill('0');
         hash << MAGIC_DD << ":" << setw (2) << SDBF_VERSION << ":";    
-        hash << (int)strlen((char*)this->hashname) << ":" << this->hashname << ":" << this->orig_file_size << ":sha1:";    
+        hash << (int)strlen((char*)this->hashname.c_str()) << ":" << this->hashname << ":" << this->orig_file_size << ":sha1:";    
         hash << this->bf_size << ":" << this->hash_count<< ":" << hex << this->mask << ":" << dec;    
         hash << this->max_elem << ":" << this->bf_count << ":" << this->dd_block_size ;
         uint32_t i;
@@ -362,7 +369,12 @@ sdbf::clone_filter(uint32_t position) {
  */
 void 
 sdbf::sdbf_create(const char *name) {
-    this->hashname = (char*)name;
+    if ( name == NULL) {
+        this->hashname = "";
+    } else {
+        this->hashname = name;
+    }
+
     this->bf_size = config->bf_size;
     this->hash_count = 5;
     this->mask = config->BF_CLASS_MASKS[0];

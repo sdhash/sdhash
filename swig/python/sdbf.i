@@ -5,12 +5,12 @@
 #include "../../sdbf/sdbf_defines.h"
 #include <stdint.h>
 #include <stdio.h>
-
 %}
 
 #define KB 1024
 %include "cpointer.i"
 %include "std_string.i"
+%include "typemaps.i"
 
 %pointer_functions(int, intp);
 
@@ -44,16 +44,18 @@ public:
     /// to read a formatted sdbf from string
     sdbf(const std::string& str); 
     /// to create new from a single file
-    sdbf(const char *filename, uint32_t dd_block_size); 
+    sdbf(const char *name, uint32_t dd_block_size); 
     /// to create by reading from an open stream
     sdbf(const char *name, std::istream *ifs, uint32_t dd_block_size, uint64_t msize, index_info *info) ; 
     /// to create from a c-string
+    %typemap(in) (char *str) { $1 = PyBytes_AsString($input); };
+    %typemap(typecheck) (char *str) { $1 = PyBytes_Check($input) ? 1 : 0; }
     sdbf(const char *name, char *str, uint32_t dd_block_size, uint64_t length, index_info *info);
     /// destructor
     ~sdbf(); 
 
     /// object name
-    const char *name();  
+    std::string name() const;
     /// object size
     uint64_t size();  
     /// source object size

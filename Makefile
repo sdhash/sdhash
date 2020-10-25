@@ -32,11 +32,11 @@ BLOOM_TEST_OBJ = $(BLOOM_TEST:.cc=.o)
 
 LIBSDBF=libsdbf.a
 
-all: boost stream 
+all: proto boost stream 
 
-debug: boost stream 
+debug: proto boost stream 
 
-cygwin: boost stream
+cygwin: proto boost stream
 
 install: boost man 
 	mkdir -p $(INSTDIR)
@@ -66,15 +66,15 @@ man/sdhash-srv.1:
 man/sdhash-cli.1:
 	pod2man -c "" -r "" man/sdhash-cli.pod > man/sdhash-cli.1
 
-swig-py: boost swig/python/sdbf_wrap.o swig/python/_sdbf_class.so 
+swig-py: proto boost swig/python/sdbf_wrap.o swig/python/_sdbf_class.so 
 swig-win-py: boost swig/python/sdbf_wrap.o swig/python/_sdbf_class.dll 
 
 swig/python/sdbf_wrap.o: sdbf.i $(LIBSDBF)
-	swig -c++ -python swig/python/sdbf.i
-	g++ -std=c++0x -fPIC -c swig/python/sdbf_wrap.cxx -o swig/python/sdbf_wrap.o -I/usr/include/python2.7
+	swig -c++ -python -py3 swig/python/sdbf.i
+	g++ -std=c++0x -fPIC -c swig/python/sdbf_wrap.cxx -o swig/python/sdbf_wrap.o -I/usr/include/python3.7
 
 swig/python/_sdbf_class.so: swig/python/sdbf_wrap.o $(LIBSDBF)
-	g++ -shared swig/python/sdbf_wrap.o -fopenmp -L./external/stage/lib -Wl,--whole-archive -lboost_system -lboost_filesystem -lboost_thread -Wl,--no-whole-archive -lpython2.7 libsdbf.a -o swig/python/_sdbf_class.so -lcrypto -lpthread 
+	g++ -shared swig/python/sdbf_wrap.o -fopenmp -L./external/stage/lib -Wl,--whole-archive -lboost_system -lboost_filesystem -lboost_thread -Wl,--no-whole-archive -lpython3.7m libsdbf.a -o swig/python/_sdbf_class.so -lcrypto -lpthread 
 
 sdbf.i:
 
@@ -87,8 +87,11 @@ stream: $(SDHASH_OBJ) $(LIBSDBF)
 bloom-test: $(BLOOM_TEST_OBJ) $(LIBSDBF)
 	$(LD) $(BLOOM_TEST_OBJ) $(LIBSDBF) -o bloom-test $(LDFLAGS) 
 
+proto:
+	protoc blooms.proto --cpp_out sdbf/
+
 boost: 
-	cd external ; ./bootstrap.sh --with-python=python2 ; ./b2 link=static cxxflags='-fPIC -std=c++0x' ; cd -
+	cd external ; ./bootstrap.sh --with-python=python3 ; ./b2 link=static cxxflags=' -fPIC -std=c++0x' ; cd -
 
 server:
 	make -C ./sdhash-server -f Makefile

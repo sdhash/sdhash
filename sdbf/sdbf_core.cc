@@ -351,7 +351,7 @@ sdbf::sdbf_score( sdbf *sdbf_1, sdbf *sdbf_2, uint32_t sample) {
     if( (bf_count_1 > sdbf_2->bf_count) ||
         (bf_count_1 == sdbf_2->bf_count && 
             ((get_elem_count( sdbf_1, bf_count_1-1) > get_elem_count( sdbf_2, sdbf_2->bf_count-1)) ||
-              strcmp( (char*)sdbf_1->hashname, (char*)sdbf_2->hashname) > 0 ))) {
+              strcmp( (char*)sdbf_1->hashname.c_str(), (char*)sdbf_2->hashname.c_str()) > 0 ))) {
             sdbf *tmp = sdbf_1;
             sdbf_1 = sdbf_2;
             sdbf_2 = tmp;
